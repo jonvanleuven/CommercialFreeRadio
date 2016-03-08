@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OmniplayerBroadcastXml>
+  <Version info.s="1.1" created.utc.iso="2016-03-04 06:00:56.697" created_by.s="Omniplayer"/>
+  <StationName id.i="10">1 Sublime FM</StationName>
+  <Played count.i="6">
+    <Previous index.i="14">
+      <startTime.utc.iso>2016-03-04 05:59:48.242</startTime.utc.iso>
+      <itemId>1001015108:7268207</itemId>
+      <titleId>57080055</titleId>
+      <itemCode>CB 139661</itemCode>
+      <itemReference>CB 139661</itemReference>
+      <titleName>Nu in het Theater Intouchables</titleName>
+      <artistName>Senf Intouchables / 29-2 tm 13</artistName>
+      <albumName></albumName>
+      <CategoryCode>442</CategoryCode>
+      <CategoryName>2016</CategoryName>
+      <itemDuration>10</itemDuration>
+      <MultiMedia1></MultiMedia1>
+      <MultiMedia2></MultiMedia2>
+      <MultiMedia3></MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="10389" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="0" xfade.msec.i="0" intro.msec.i="0"/>
+    </Previous>
+    <Previous index.i="15">
+      <startTime.utc.iso>2016-03-04 05:59:58.154</startTime.utc.iso>
+      <itemId>1001015108:7268215</itemId>
+      <titleId>57079796</titleId>
+      <itemCode>CB 139055</itemCode>
+      <itemReference>CB 139055</itemReference>
+      <titleName>HS Auto / Promovendum</titleName>
+      <artistName>Promovendum / Autoverzekering</artistName>
+      <albumName></albumName>
+      <CategoryCode>442</CategoryCode>
+      <CategoryName>2016</CategoryName>
+      <itemDuration>10</itemDuration>
+      <MultiMedia1></MultiMedia1>
+      <MultiMedia2></MultiMedia2>
+      <MultiMedia3></MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="10398" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="0" xfade.msec.i="0" intro.msec.i="0"/>
+    </Previous>
+    <Previous index.i="16">
+      <startTime.utc.iso>2016-03-04 06:00:08.074</startTime.utc.iso>
+      <itemId>1001015108:7268209</itemId>
+      <titleId>57080057</titleId>
+      <itemCode>CB 139620</itemCode>
+      <itemReference>CB 139620</itemReference>
+      <titleName>WK9 WinkelMarketing Sportwinke</titleName>
+      <artistName>Bol.com / Sport / 29-02 tm 06-</artistName>
+      <albumName></albumName>
+      <CategoryCode>442</CategoryCode>
+      <CategoryName>2016</CategoryName>
+      <itemDuration>20</itemDuration>
+      <MultiMedia1></MultiMedia1>
+      <MultiMedia2></MultiMedia2>
+      <MultiMedia3></MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="20475" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="0" xfade.msec.i="0" intro.msec.i="0"/>
+    </Previous>
+    <Previous index.i="17">
+      <startTime.utc.iso>2016-03-04 06:00:28.041</startTime.utc.iso>
+      <itemId>1001015108:7268208</itemId>
+      <titleId>57079797</titleId>
+      <itemCode>CB 139056</itemCode>
+      <itemReference>CB 139056</itemReference>
+      <titleName>TO Auto / Promovendum</titleName>
+      <artistName>Promovendum / Autoverzekering</artistName>
+      <albumName></albumName>
+      <CategoryCode>442</CategoryCode>
+      <CategoryName>2016</CategoryName>
+      <itemDuration>15</itemDuration>
+      <MultiMedia1></MultiMedia1>
+      <MultiMedia2></MultiMedia2>
+      <MultiMedia3></MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="15149" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="0" xfade.msec.i="0" intro.msec.i="0"/>
+    </Previous>
+    <Previous index.i="18">
+      <startTime.utc.iso>2016-03-04 06:00:42.719</startTime.utc.iso>
+      <itemId>1001015108:7268210</itemId>
+      <titleId>57002623</titleId>
+      <itemCode>CB 4006</itemCode>
+      <itemReference>CB 4006</itemReference>
+      <titleName>Eindpingel</titleName>
+      <artistName>reklame</artistName>
+      <albumName></albumName>
+      <CategoryCode>19</CategoryCode>
+      <CategoryName>Reclame</CategoryName>
+      <itemDuration>3</itemDuration>
+      <MultiMedia1></MultiMedia1>
+      <MultiMedia2></MultiMedia2>
+      <MultiMedia3></MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="3827" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="0" xfade.msec.i="-2115" intro.msec.i="0"/>
+    </Previous>
+    <Previous index.i="19">
+      <startTime.utc.iso>2016-03-04 06:00:43.983</startTime.utc.iso>
+      <itemId>1001015026:7267664</itemId>
+      <titleId>57075469</titleId>
+      <itemCode></itemCode>
+      <itemReference></itemReference>
+      <titleName>NEWS 07 2015</titleName>
+      <artistName></artistName>
+      <albumName></albumName>
+      <CategoryCode>288</CategoryCode>
+      <CategoryName>Nieuws/verkeer</CategoryName>
+      <itemDuration>12</itemDuration>
+      <MultiMedia1>NEWS 07 2015</MultiMedia1>
+      <MultiMedia2></MultiMedia2>
+      <MultiMedia3>NIEUWS</MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="12351" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="-1586" xfade.msec.i="-4342" intro.msec.i="0"/>
+    </Previous>
+  </Played>
+  <Current>
+    <startTime.utc.iso>2016-03-04 06:00:51.607</startTime.utc.iso>
+    <itemId>1001015108:7268210</itemId>
+    <titleId>57002623</titleId>
+    <itemCode>CB 4006</itemCode>
+    <itemReference>CB 4006</itemReference>
+    <titleName>Eindpingel</titleName>
+    <artistName>reklame</artistName>
+    <albumName></albumName>
+    <CategoryCode>19</CategoryCode>
+    <CategoryName>Reclame</CategoryName>
+    <itemDuration>3</itemDuration>
+    <MultiMedia1></MultiMedia1>
+    <MultiMedia2></MultiMedia2>
+    <MultiMedia3></MultiMedia3>
+    <MultiMedia4></MultiMedia4>
+    <Comments1></Comments1>
+    <Comments2></Comments2>
+    <Comments3></Comments3>
+    <Mix duration.msec.i="3827" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="0" xfade.msec.i="-2115" intro.msec.i="0"/>
+  </Current>
+  <Upcoming count.i="10">
+    <Next index.i="0">
+      <startTime.utc.iso>2016-03-04 06:02:08.025</startTime.utc.iso>
+      <itemId>1001015026:7267663</itemId>
+      <titleId>57080120</titleId>
+      <itemCode></itemCode>
+      <itemReference></itemReference>
+      <titleName>Stream WEER SPONSOR 2016 </titleName>
+      <artistName></artistName>
+      <albumName></albumName>
+      <CategoryCode>288</CategoryCode>
+      <CategoryName>Nieuws/verkeer</CategoryName>
+      <itemDuration>6</itemDuration>
+      <MultiMedia1></MultiMedia1>
+      <MultiMedia2></MultiMedia2>
+      <MultiMedia3></MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="6120" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="-312" xfade.msec.i="-268" intro.msec.i="0"/>
+    </Next>
+    <Next index.i="1">
+      <startTime.utc.iso>2016-03-04 06:02:13.877</startTime.utc.iso>
+      <itemId>1001015026:7267666</itemId>
+      <titleId>57079681</titleId>
+      <itemCode></itemCode>
+      <itemReference></itemReference>
+      <titleName>AANKONDIGING NVDVG na nieuws V1 no sponsor</titleName>
+      <artistName></artistName>
+      <albumName></albumName>
+      <CategoryCode>287</CategoryCode>
+      <CategoryName>Toth</CategoryName>
+      <itemDuration>4</itemDuration>
+      <MultiMedia1></MultiMedia1>
+      <MultiMedia2></MultiMedia2>
+      <MultiMedia3></MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="4176" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="0" xfade.msec.i="-225" intro.msec.i="0"/>
+    </Next>
+    <Next index.i="2">
+      <startTime.utc.iso>2016-03-04 06:02:17.828</startTime.utc.iso>
+      <itemId>1001015027:7267668</itemId>
+      <titleId>57073182</titleId>
+      <itemCode></itemCode>
+      <itemReference></itemReference>
+      <titleName>** ANWB VERKEERSINFO **</titleName>
+      <artistName></artistName>
+      <albumName></albumName>
+      <CategoryCode>288</CategoryCode>
+      <CategoryName>Nieuws/verkeer</CategoryName>
+      <itemDuration>11</itemDuration>
+      <MultiMedia1>!RDS TA ON</MultiMedia1>
+      <MultiMedia2>!RDS TA ON</MultiMedia2>
+      <MultiMedia3>VERKEER</MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="11904" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="0" xfade.msec.i="0" intro.msec.i="0"/>
+    </Next>
+    <Next index.i="3">
+      <startTime.utc.iso>2016-03-04 06:02:29.732</startTime.utc.iso>
+      <itemId>1001014017:7260770</itemId>
+      <titleId>57079059</titleId>
+      <itemCode></itemCode>
+      <itemReference></itemReference>
+      <titleName>TOTH Jan 16 morning</titleName>
+      <artistName></artistName>
+      <albumName></albumName>
+      <CategoryCode>287</CategoryCode>
+      <CategoryName>Toth</CategoryName>
+      <itemDuration>13</itemDuration>
+      <MultiMedia1></MultiMedia1>
+      <MultiMedia2></MultiMedia2>
+      <MultiMedia3></MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="13800" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="0" xfade.msec.i="-2890" intro.msec.i="0"/>
+    </Next>
+    <Next index.i="4">
+      <startTime.utc.iso>2016-03-04 06:02:40.642</startTime.utc.iso>
+      <itemId>1001014017:7260345</itemId>
+      <titleId>57074088</titleId>
+      <itemCode>MT001-09</itemCode>
+      <itemReference></itemReference>
+      <titleName>Muhammad Ali</titleName>
+      <artistName>Faithless</artistName>
+      <albumName></albumName>
+      <CategoryCode>179</CategoryCode>
+      <CategoryName>Artiest A - F</CategoryName>
+      <itemDuration>209</itemDuration>
+      <MultiMedia1>Muhammad Ali</MultiMedia1>
+      <MultiMedia2>Faithless</MultiMedia2>
+      <MultiMedia3>Faithless</MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="209616" begin_offset.msec.i="0" end_offset.msec.i="-1625" fadein.msec.i="0" fadeout.msec.i="-670" xfade.msec.i="-1294" intro.msec.i="0"/>
+    </Next>
+    <Next index.i="5">
+      <startTime.utc.iso>2016-03-04 06:06:07.339</startTime.utc.iso>
+      <itemId>1001014017:7260346</itemId>
+      <titleId>57075562</titleId>
+      <itemCode>3003-02</itemCode>
+      <itemReference></itemReference>
+      <titleName>SHORT SWEEP v1 male</titleName>
+      <artistName></artistName>
+      <albumName></albumName>
+      <CategoryCode>384</CategoryCode>
+      <CategoryName>Sweepers 2015</CategoryName>
+      <itemDuration>1</itemDuration>
+      <MultiMedia1></MultiMedia1>
+      <MultiMedia2></MultiMedia2>
+      <MultiMedia3></MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="1632" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="0" xfade.msec.i="-1215" intro.msec.i="0"/>
+    </Next>
+    <Next index.i="6">
+      <startTime.utc.iso>2016-03-04 06:06:07.756</startTime.utc.iso>
+      <itemId>1001014017:7260347</itemId>
+      <titleId>57012690</titleId>
+      <itemCode>7585-00</itemCode>
+      <itemReference>7585-00</itemReference>
+      <titleName>Mesmerized</titleName>
+      <artistName>Faith Evans</artistName>
+      <albumName></albumName>
+      <CategoryCode>179</CategoryCode>
+      <CategoryName>Artiest A - F</CategoryName>
+      <itemDuration>250</itemDuration>
+      <MultiMedia1>Mesmerized</MultiMedia1>
+      <MultiMedia2>Faith Evans</MultiMedia2>
+      <MultiMedia3>Faith/Evans</MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="250536" begin_offset.msec.i="280" end_offset.msec.i="-1976" fadein.msec.i="0" fadeout.msec.i="-2267" xfade.msec.i="-2487" intro.msec.i="1600"/>
+    </Next>
+    <Next index.i="7">
+      <startTime.utc.iso>2016-03-04 06:10:13.549</startTime.utc.iso>
+      <itemId>1001014017:7260349</itemId>
+      <titleId>57018412</titleId>
+      <itemCode>8643-00</itemCode>
+      <itemReference>8643-00</itemReference>
+      <titleName>P.D.A. (We Just Don't Care)</titleName>
+      <artistName>John Legend</artistName>
+      <albumName></albumName>
+      <CategoryCode>180</CategoryCode>
+      <CategoryName>Artiest G - N</CategoryName>
+      <itemDuration>222</itemDuration>
+      <MultiMedia1>P.D.A. (We Just Don't Care)</MultiMedia1>
+      <MultiMedia2>John Legend</MultiMedia2>
+      <MultiMedia3>John/Legend</MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="222192" begin_offset.msec.i="0" end_offset.msec.i="-1344" fadein.msec.i="0" fadeout.msec.i="-4409" xfade.msec.i="-3640" intro.msec.i="21500"/>
+    </Next>
+    <Next index.i="8">
+      <startTime.utc.iso>2016-03-04 06:13:50.757</startTime.utc.iso>
+      <itemId>1001014017:7260350</itemId>
+      <titleId>57053048</titleId>
+      <itemCode>3001-02</itemCode>
+      <itemReference></itemReference>
+      <titleName>sublimefm_02medium_short</titleName>
+      <artistName></artistName>
+      <albumName></albumName>
+      <CategoryCode>285</CategoryCode>
+      <CategoryName>Jingles</CategoryName>
+      <itemDuration>7</itemDuration>
+      <MultiMedia1></MultiMedia1>
+      <MultiMedia2></MultiMedia2>
+      <MultiMedia3></MultiMedia3>
+      <MultiMedia4></MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="7632" begin_offset.msec.i="0" end_offset.msec.i="0" fadein.msec.i="0" fadeout.msec.i="-2563" xfade.msec.i="-3003" intro.msec.i="0"/>
+    </Next>
+    <Next index.i="9">
+      <startTime.utc.iso>2016-03-04 06:13:55.386</startTime.utc.iso>
+      <itemId>1001014017:7260351</itemId>
+      <titleId>57001279</titleId>
+      <itemCode>G147-14</itemCode>
+      <itemReference>G147-14</itemReference>
+      <titleName>I Ain't Gonna Stand For It</titleName>
+      <artistName>Stevie Wonder</artistName>
+      <albumName></albumName>
+      <CategoryCode>300</CategoryCode>
+      <CategoryName>Sublime Fresh</CategoryName>
+      <itemDuration>279</itemDuration>
+      <MultiMedia1>I Ain't Gonna Stand For It</MultiMedia1>
+      <MultiMedia2>Stevie Wonder</MultiMedia2>
+      <MultiMedia3>Stevie/Wonder</MultiMedia3>
+      <MultiMedia4>279048</MultiMedia4>
+      <Comments1></Comments1>
+      <Comments2></Comments2>
+      <Comments3></Comments3>
+      <Mix duration.msec.i="279048" begin_offset.msec.i="0" end_offset.msec.i="-2904" fadein.msec.i="0" fadeout.msec.i="-3848" xfade.msec.i="-3293" intro.msec.i="0"/>
+    </Next>
+  </Upcoming>
+</OmniplayerBroadcastXml>
