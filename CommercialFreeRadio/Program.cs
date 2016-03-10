@@ -16,15 +16,16 @@ namespace CommercialFreeRadio
                 args.ConsoleWriteUsage();
                 return;
             }
-            Logger.DateTimePattern = "HH:mm:ss";
             Logger.IsDebugEnabled = args.UseVerbose;
-            var station = new StationSublimeFm();
+            //IRadioStation station = new StationSublimeFm();
+            IRadioStation station = new StationArrowCaz();
             //var station = new Station3fm();
             var nonstop = new StationBlueMarlin();
             var player = CreatePlayer(args);
             Logger.Info("Using player: " + player.Name);
             var poller = CreatePoller(new TimeSpan(0, 0, 1));
-            player.Play(station);
+//            if ((player.IsPlaying(station) ?? true))
+//                player.Play(station);
             var state = new State((fromType, toType) =>
             {
                 Logger.Info("--- {0}", toType);
@@ -43,15 +44,31 @@ namespace CommercialFreeRadio
                         Logger.Info("Not switching to '" + nonstop.Name + "', not playing '" + station.Name + "'");
                 }
             });
+            var stations = new IRadioStation[] {new StationSublimeFm(), new Station3fm(), new StationArrowCaz()};
             foreach (var now in poller)
             {
-                var commercialPlaying = station.IsPlayingCommercialBreak();
-                if (commercialPlaying == null)
-                    Logger.Info("Kan niet bepalen of er een commercial wordt afgespeeld, IsPlayingCommercialBreak van station '{0}' returned null", station.Name);
-                else if (commercialPlaying ?? false)
-                    state.UpdateSoundType(SoundType.CommercialBreak);
-                else
-                    state.UpdateSoundType(SoundType.Music);
+                try
+                {
+                    var nowPlaying = stations.SingleOrDefault(s => player.IsPlaying(s)??false);
+                    if (nowPlaying != null)
+                    {
+                        if( station.Name != nowPlaying.Name )
+                            Logger.Info("Switching to channel '{0}'", nowPlaying.Name);
+                        station = nowPlaying;
+                    }   
+                    var commercialPlaying = station.IsPlayingCommercialBreak();
+                    if (commercialPlaying == null)
+                        Logger.Info("Kan niet bepalen of er een commercial wordt afgespeeld, IsPlayingCommercialBreak van station '{0}' returned null", station.Name);
+                    else if (commercialPlaying ?? false)
+                        state.UpdateSoundType(SoundType.CommercialBreak);
+                    else
+                        state.UpdateSoundType(SoundType.Music);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                    Thread.Sleep(10000);
+                }
             }
         }
 

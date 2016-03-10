@@ -1,33 +1,32 @@
 using System;
+using System.IO;
+using System.Reflection;
+using log4net;
+using log4net.Config;
 
 namespace CommercialFreeRadio.Impl
 {
     public static class Logger
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         static Logger()
         {
-            DateTimePattern = "dd-MM-yyyy HH:mm:ss";
+            XmlConfigurator.ConfigureAndWatch(new FileInfo("log4netconfig.xml"));
         }
         public static void Debug(object m, params object[] args)
         {
             if (!IsDebugEnabled) return;
-            Console.WriteLine(string.Format("{0} DEBUG {1}", Now(), string.Format(m != null ? m.ToString() : string.Empty, args)));
+            Log.DebugFormat(m != null ? m.ToString() : string.Empty, args);
         }
         public static void Info(object m, params object[] args)
         {
-            Console.WriteLine(string.Format("{0} INFO  {1}", Now(), string.Format(m != null ? m.ToString() : string.Empty, args)));
+            Log.InfoFormat(m != null ? m.ToString() : string.Empty, args);
         }
         public static void Error(Exception e)
         {
-            Console.WriteLine(string.Format("{0} ERROR {1}\n{2}", Now(), e.Message, e.StackTrace));
-        }
-
-        private static string Now()
-        {
-            return string.Format(DateTime.Now.ToString(DateTimePattern));
+            Log.Error(e);
         }
 
         public static bool IsDebugEnabled { get; set; }
-        public static string DateTimePattern { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -31,28 +32,29 @@ namespace CommercialFreeRadio.Impl
 
         public bool? IsPlayingCommercialBreak()
         {
-            try
+            var now = DateTime.Now;
+            var track = playlist.ReadTracks().FirstOrDefault(t => t.StartTime < now && t.EndTime > now);
+            if (track == null && currentTrackId != null)
             {
-                var now = DateTime.Now;
-                var track = playlist.ReadTracks().FirstOrDefault(t => t.StartTime < now && t.EndTime > now);
-                if (track == null && currentTrackId != null)
-                {
-                    playlist.ClearCache();
-                    track = playlist.ReadTracks().FirstOrDefault(t => t.StartTime < now && t.EndTime > now);
-                }
-                if (track != null && track.Id != currentTrackId)
-                    Logger.Debug("Current track: " + track);
-                currentTrackId = track != null ? track.Id : null;
-                return track == null
-                    ? (bool?)null
-                    : track.Type == PlaylistSublimeFmInterface.TrackType.Commercial ||
-                      track.Type == PlaylistSublimeFmInterface.TrackType.News;
+                playlist.ClearCache();
+                track = playlist.ReadTracks().FirstOrDefault(t => t.StartTime < now && t.EndTime > now);
             }
-            catch (WebException e)
-            {
-                Logger.Error(e);
-                return null;
-            }
+            if (track != null && track.Id != currentTrackId)
+                Logger.Debug("Current track: " + track);
+            currentTrackId = track != null ? track.Id : null;
+            return track == null
+                ? (bool?)null
+                : track.Type == PlaylistSublimeFmInterface.TrackType.Commercial ||
+                    track.Type == PlaylistSublimeFmInterface.TrackType.News;
+        }
+
+        public bool? IsMyStream(string uri)
+        {
+            if (uri == Uri)
+                return true;
+            if (uri == "aac://82.201.47.68/SublimeFM")
+                return true;
+            return false;
         }
 
         public interface IXmlInterfaceSublimeFm
@@ -101,21 +103,29 @@ namespace CommercialFreeRadio.Impl
 
             private IList<Track> ParseXml(string xml)
             {
-                var doc = XDocument.Parse(xml);
-                var previous = doc.XPathSelectElements("/OmniplayerBroadcastXml/Played/Previous").Select(ParseTrack).ToList();
-                var current = ParseTrack(doc.XPathSelectElement("/OmniplayerBroadcastXml/Current"));
-                var next = doc.XPathSelectElements("/OmniplayerBroadcastXml/Upcoming/Next").Select(ParseTrack).ToList();
-                var result = new List<Track>();
-                result.AddRange(previous);
-                result.Add(current);
-                result.AddRange(next);
-                result = result.Where( (t, index) => t.Type != TrackType.Jingle || 
-                        (index>0 && result[index-1].Type == TrackType.Song) || //'Jingle' voor muziek behouden
-                        (index<result.Count-1 && result[index+1].Type == TrackType.Song) //'Jingle' na muziek behouden
-                        ).ToList();
-                for (var i = 0; i < result.Count - 1; i++)
-                    result[i].EndTime = result[i + 1].StartTime;
-                return result;
+                try
+                {
+                    var doc = XDocument.Parse(xml);
+                    var previous = doc.XPathSelectElements("/OmniplayerBroadcastXml/Played/Previous").Select(ParseTrack).ToList();
+                    var current = ParseTrack(doc.XPathSelectElement("/OmniplayerBroadcastXml/Current"));
+                    var next = doc.XPathSelectElements("/OmniplayerBroadcastXml/Upcoming/Next").Select(ParseTrack).ToList();
+                    var result = new List<Track>();
+                    result.AddRange(previous);
+                    result.Add(current);
+                    result.AddRange(next);
+                    result = result.Where((t, index) => t.Type != TrackType.Jingle ||
+                           (index > 0 && result[index - 1].Type == TrackType.Song) || //'Jingle' voor muziek behouden
+                           (index < result.Count - 1 && result[index + 1].Type == TrackType.Song) //'Jingle' na muziek behouden
+                            ).ToList();
+                    for (var i = 0; i < result.Count - 1; i++)
+                        result[i].EndTime = result[i + 1].StartTime;
+                    return result;
+                }
+                catch (XmlException e)
+                {
+                    Logger.Debug("Unable to parse: " + xml);
+                    throw e;
+                }
             }
 
             private Track ParseTrack(XElement node)

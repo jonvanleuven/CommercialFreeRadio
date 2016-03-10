@@ -44,6 +44,11 @@ namespace CommercialFreeRadio.Impl
             return false;
         }
 
+        public bool? IsMyStream(string uri)
+        {
+            return Uri == uri || uri.ToLower().Contains("3fm");
+        }
+
         public interface IJsonInterface3Fm
         {
             byte[] ReadJsonData();
@@ -88,6 +93,7 @@ namespace CommercialFreeRadio.Impl
                 lastCall = DateTime.Now;
                 var ser = new DataContractJsonSerializer(typeof(JsonResult));
                 lastTrack = Track.Parse(((JsonResult)ser.ReadObject(new MemoryStream(jsonBytes))).results.FirstOrDefault(), delay);
+                Logger.Debug(lastTrack);
                 return lastTrack;
             }
 

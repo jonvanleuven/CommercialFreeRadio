@@ -12,5 +12,10 @@ namespace CommercialFreeRadio.Impl
         {
             return null;
         }
+
+        public bool? IsMyStream(string uri)
+        {
+            return Uri == uri;
+        }
     }
 }

@@ -5,5 +5,6 @@ namespace CommercialFreeRadio
         string Name { get; }
         string Uri { get; }
         bool? IsPlayingCommercialBreak();
+        bool? IsMyStream(string uri);
     }
 }

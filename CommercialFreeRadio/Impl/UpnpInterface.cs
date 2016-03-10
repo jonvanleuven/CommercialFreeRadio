@@ -16,6 +16,23 @@ namespace CommercialFreeRadio.Impl
             this.ip = ip;
         }
 
+        public void SetVolume(int volume)
+        {
+            SoapCall(
+                "MediaRenderer/RenderingControl/Control",
+                "urn:upnp-org:serviceId:RenderingControl#SetVolume",
+                @"<ns0:SetVolume xmlns:ns0=""urn:schemas-upnp-org:service:RenderingControl:1""><InstanceID>0</InstanceID><Channel>Master</Channel><InstanceID>0</InstanceID><DesiredVolume>" + volume + "</DesiredVolume></ns0:SetVolume>");
+        }
+
+        public int GetVolume()
+        {
+            var xml = SoapCall(
+                "MediaRenderer/RenderingControl/Control",
+                "urn:upnp-org:serviceId:RenderingControl#GetVolume",
+                @"<ns0:GetVolume xmlns:ns0=""urn:schemas-upnp-org:service:RenderingControl:1""><InstanceID>0</InstanceID><Channel>Master</Channel></ns0:GetVolume>");
+            return ParseInt(GetElementValue(xml, "CurrentVolume")).Value;
+        }
+
         public void SetAVTransportURI(string uri)
         {
             SoapCall(
