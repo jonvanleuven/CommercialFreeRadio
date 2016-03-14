@@ -17,22 +17,34 @@ namespace CommercialFreeRadio
                 return;
             }
             Logger.IsDebugEnabled = args.UseVerbose;
-            //IRadioStation station = new StationSublimeFm();
-            IRadioStation station = new StationArrowCaz();
+            var stations = new IRadioStation[] { new StationSublimeFm(), new Station3fm(), new StationArrowCaz(), new StationArrowClassicRock(), new StationWildFm() };
+
+            IRadioStation station = args.UseRandom 
+                ? new StationRandomizer(stations) 
+                : new StationSublimeFm() as IRadioStation;
+            //IRadioStation station = new StationArrowClassicRock();
+//            var station = args.UseSonosPlayer 
+//                ? new StationSublimeFm()
+//                : new StationRandomizer(stations) as IRadioStation;
             //var station = new Station3fm();
-            var nonstop = new StationBlueMarlin();
+            var nonstop = new StationBlueMarlin(); //new StationDeepFm();
             var player = CreatePlayer(args);
             Logger.Info("Using player: " + player.Name);
             var poller = CreatePoller(new TimeSpan(0, 0, 1));
-//            if ((player.IsPlaying(station) ?? true))
-//                player.Play(station);
+            if (args.UseVlcPlayer)
+                player.Play(station);
             var state = new State((fromType, toType) =>
             {
                 Logger.Info("--- {0}", toType);
                 if (fromType == SoundType.CommercialBreak)
                 {
-                    if( (player.IsPlaying(nonstop) ?? true) )
+                    if ((player.IsPlaying(nonstop) ?? true))
+                    {
+//                        var randomStation = station as StationRandomizer;
+//                        if (randomStation != null)
+//                            station = randomStation.SwitchStation();
                         player.Play(station);
+                    }
                     else
                         Logger.Info("Not switching to '" + station.Name + "', not playing '" + nonstop.Name + "'");
                 }
@@ -44,7 +56,6 @@ namespace CommercialFreeRadio
                         Logger.Info("Not switching to '" + nonstop.Name + "', not playing '" + station.Name + "'");
                 }
             });
-            var stations = new IRadioStation[] {new StationSublimeFm(), new Station3fm(), new StationArrowCaz()};
             foreach (var now in poller)
             {
                 try
@@ -125,8 +136,9 @@ namespace CommercialFreeRadio
                 UseSonosPlayer = args.Any(a => a.StartsWith("/sonos"));
                 UseVlcPlayer = args.Contains("/vlc");
                 UseVerbose = args.Contains("/verbose");
+                UseRandom = args.Contains("/random");
                 if (UseSonosPlayer)
-                    SonosIp = args.Where(a => a.StartsWith("/sonos") && a.Split('=').Length>1).Select(a => a.Split('=')[1]).FirstOrDefault() ?? "192.168.1.16";
+                    SonosIp = args.Where(a => a.StartsWith("/sonos") && a.Split('=').Length>1).Select(a => a.Split('=')[1]).FirstOrDefault();
             }
 
             public bool PrintUsage { get; private set; }
@@ -134,15 +146,17 @@ namespace CommercialFreeRadio
             public string SonosIp { get; private set; }
             public bool UseVlcPlayer { get; private set; }
             public bool UseVerbose { get; private set; }
+            public bool UseRandom { get; private set; }
 
             internal void ConsoleWriteUsage()
             {
                 Console.WriteLine(@"Usage:
   Player options:
-   /sonos[=<ip-address>]   Use sonos player. Default ip address=192.168.1.16
+   /sonos=<ip-address>     Use sonos player
    /vlc                    Use VLC player 
   Other options:
-   [/verbose]              Print verbose");
+   [/verbose]              Print verbose
+   [/random]               Switch to other radio station after commercial break");
             }
         }
     }

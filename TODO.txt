@@ -8,7 +8,10 @@ V ChangeHandler
 - ISysteemDatum 
 - andere radiostations toevoegen:
   V ArrowCaz: http://www.arrowcaz.nl/newplayer/backend/get_xml/http:**www.arrowcaz.nl*xmlinserter*onair.xml!rnd=5367066201
-  - ArrowClassicRock
+  V ArrowClassicRock
+  - Wild FM (x-rincon-mp3radio://149.210.223.94/wildfm.mp3)
+    https://feed.tunein.com/profiles/s77950/nowplaying?itemToken=eyJwIjpmYWxzZSwidCI6IjIwMTYtMDMtMTJUMTg6MzA6MjkuNTExNzIwNloifQ==&partnerId=RadioTime&serial=9276ad87-a2e9-47c6-8e59-f04478dff520
+    
 V VlcPlayer gebruiken voor lokaal gebruik
 V Rename project naar CommercialFreeRadio
 - Publish in GitHub
@@ -30,6 +33,8 @@ V SonosPlayer.IsPlaying implementatie
 X IRadioStation: IEnumerable<string> Uri { get; }
 - support all stations: als sonos switcht van zender dan die oppakken
 - queue station op playlist en next i.p.v. seturi->play ?
+- IPlayer.IsPlaying 
+- new VlcPlayer(IRadiostation)
 
 V TextToSpeech exe/app -> Sonos
 

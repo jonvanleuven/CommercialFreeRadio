@@ -55,10 +55,14 @@
     <Compile Include="Impl\SonosPlayer.cs" />
     <Compile Include="Impl\StationArrowCaz.cs" />
     <Compile Include="Impl\StationArrowClassicRock.cs" />
+    <Compile Include="Impl\StationDeepFm.cs" />
     <Compile Include="Impl\StationNpo1.cs" />
+    <Compile Include="Impl\StationRandomizer.cs" />
     <Compile Include="Impl\StationSublimeFm.cs" />
     <Compile Include="Impl\Station3fm.cs" />
     <Compile Include="Impl\StationBlueMarlin.cs" />
+    <Compile Include="Impl\StationWildFm.cs" />
+    <Compile Include="Impl\TuneInNowPlayingFeed.cs" />
     <Compile Include="Impl\UpnpInterface.cs" />
     <Compile Include="IDeviceScanner.cs" />
     <Compile Include="Impl\VlcPlayer.cs" />

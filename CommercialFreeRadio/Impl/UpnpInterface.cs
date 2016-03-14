@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,6 +14,8 @@ namespace CommercialFreeRadio.Impl
 
         public UpnpInterface(string ip)
         {
+            if( string.IsNullOrEmpty(ip) )
+                throw new NullReferenceException("Ip address is mandatory");
             this.ip = ip;
         }
 
