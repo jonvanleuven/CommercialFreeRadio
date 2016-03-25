@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Runtime.Serialization.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CommercialFreeRadio.Impl
 {
     public class TuneInNowPlayingFeed
     {
-        public RootObject Read(string url)
+        private readonly string url;
+        public TuneInNowPlayingFeed(string url)
+        {
+            this.url = url;
+        }
+
+        public RootObject Read()
         {
             var ser = new DataContractJsonSerializer(typeof(RootObject));
-            return ((RootObject)ser.ReadObject(new MemoryStream(ReadJsonData(url))));
+            return ((RootObject)ser.ReadObject(new MemoryStream(ReadJsonData())));
         }
-        private byte[] ReadJsonData(string url)
+        private byte[] ReadJsonData()
         {
             Logger.Debug(url);
             var req = WebRequest.Create(url);

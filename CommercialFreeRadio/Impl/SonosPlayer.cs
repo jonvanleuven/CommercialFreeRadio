@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace CommercialFreeRadio.Impl
 {
@@ -29,7 +30,9 @@ namespace CommercialFreeRadio.Impl
 
         public bool? IsPlaying(IRadioStation station)
         {
-            var uriPlaying = isplayingCache.ReadCached(() => player.GetPositionInfo().TrackURI);
+            var uriPlaying = isplayingCache.ReadCached(() => player.GetTransportInfo().CurrentTransportState == "PLAYING" ? player.GetPositionInfo().TrackURI : null);
+            if (uriPlaying == null)
+                return false;
             return station.IsMyStream(uriPlaying);
         }
     }

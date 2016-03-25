@@ -54,6 +54,8 @@ namespace CommercialFreeRadio.Impl
                 return true;
             if (uri == "aac://82.201.47.68/SublimeFM")
                 return true;
+            if (uri == "aac://stream01.sublimefm.nl/SublimeFM_aac")
+                return true;
             return false;
         }
 

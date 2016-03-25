@@ -8,7 +8,7 @@ namespace CommercialFreeRadio.Impl
         }
         public string Uri
         {
-            get { return "x-rincon-mp3radio://stream3.ibizasonica.com:8635/"; }
+            get { return "x-rincon-mp3radio://s3.sonicabroadcast.com:8635/"; }
         }
         public bool? IsPlayingCommercialBreak()
         {
@@ -17,6 +17,8 @@ namespace CommercialFreeRadio.Impl
 
         public bool? IsMyStream(string uri)
         {
+            if (uri == "x-rincon-mp3radio://stream3.ibizasonica.com:8635/")
+                return true;
             return uri == Uri;
         }
     }

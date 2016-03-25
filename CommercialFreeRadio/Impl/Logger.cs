@@ -11,11 +11,15 @@ namespace CommercialFreeRadio.Impl
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         static Logger()
         {
-            XmlConfigurator.ConfigureAndWatch(new FileInfo("log4netconfig.xml"));
         }
+
+        public static void Init(bool verbose)
+        {
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(verbose ? "log4netconfigverbose.xml" : "log4netconfig.xml"));
+        }
+
         public static void Debug(object m, params object[] args)
         {
-            if (!IsDebugEnabled) return;
             Log.DebugFormat(m != null ? m.ToString() : string.Empty, args);
         }
         public static void Info(object m, params object[] args)
@@ -26,7 +30,5 @@ namespace CommercialFreeRadio.Impl
         {
             Log.Error(e);
         }
-
-        public static bool IsDebugEnabled { get; set; }
     }
 }

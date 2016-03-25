@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CommercialFreeRadio.Impl
+﻿namespace CommercialFreeRadio.Impl
 {
     public class EmptyPlayer : IPlayer
     {
         private IRadioStation currentStation;
+
         public string Name { get { return "EmptyPlayer"; } }
 
         public void Play(IRadioStation station)

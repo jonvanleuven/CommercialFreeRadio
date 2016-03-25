@@ -9,7 +9,7 @@ V ChangeHandler
 - andere radiostations toevoegen:
   V ArrowCaz: http://www.arrowcaz.nl/newplayer/backend/get_xml/http:**www.arrowcaz.nl*xmlinserter*onair.xml!rnd=5367066201
   V ArrowClassicRock
-  - Wild FM (x-rincon-mp3radio://149.210.223.94/wildfm.mp3)
+  V Wild FM (x-rincon-mp3radio://149.210.223.94/wildfm.mp3)
     https://feed.tunein.com/profiles/s77950/nowplaying?itemToken=eyJwIjpmYWxzZSwidCI6IjIwMTYtMDMtMTJUMTg6MzA6MjkuNTExNzIwNloifQ==&partnerId=RadioTime&serial=9276ad87-a2e9-47c6-8e59-f04478dff520
     
 V VlcPlayer gebruiken voor lokaal gebruik
@@ -20,7 +20,7 @@ V sublimefm: set einddatum track voor snellere lookup
 V als sonos niet speelt: geen play
 V CommandLineArguments class
   V /sonos=ip 
-  - /vlc=currentStation
+  V /vlc=currentStation
   V /debug
   V print usage
 - CommercialFreeTV (project renamen naar CommercialFreeStream o.i.d.)
@@ -28,43 +28,17 @@ V CommandLineArguments class
   V SterExtra app uitproberen: werkt niet meer
 V ipnpInterface: add GetMediaInfo en GetPositionInfo ?
 V SonosPlayer.IsPlaying implementatie
-- IPlayer.CurrentRadioStation => IRadioStation
+X IPlayer.CurrentRadioStation => IRadioStation
 - RandomPlayer implements IPlayer: delegate wrapper die random van zender wisselt
 X IRadioStation: IEnumerable<string> Uri { get; }
-- support all stations: als sonos switcht van zender dan die oppakken
-- queue station op playlist en next i.p.v. seturi->play ?
-- IPlayer.IsPlaying 
-- new VlcPlayer(IRadiostation)
+V support all stations: als sonos switcht van zender dan die oppakken
+- queue station op playlist en next i.p.v. setUri->play ?
+X IPlayer.IsPlaying 
+X new VlcPlayer(IRadiostation)
+- wilfFm/arrowclassic rock "learn" song length
+- ChromecastPlayer
+- discover devices (http://www.codeproject.com/Articles/27992/NAT-Traversal-with-UPnP-in-C)
+V verbose off: log wel debug naar log file
+
 
 V TextToSpeech exe/app -> Sonos
-
-21:59:46 DEBUG <u:GetMediaInfoResponse xmlns:u="urn:schemas-upnp-org:service:AVTransport:1">
-  <NrTracks>2</NrTracks>
-  <MediaDuration>NOT_IMPLEMENTED</MediaDuration>
-  <CurrentURI>x-sonosapi-stream:s25777?sid=254&amp;flags=8224&amp;sn=0</CurrentURI>
-  <CurrentURIMetaData>&lt;DIDL-Lite xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/" xmlns:r="urn:schemas-rinconnetworks-com:metadata-1-0/" xmlns="urn:schemas-upnp-org:metadata-1-0/D
-IDL-Lite/"&gt;&lt;item id="-1" parentID="-1" restricted="true"&gt;&lt;dc:title&gt;Sublime FM&lt;/dc:title&gt;&lt;upnp:class&gt;object.item.audioItem.audioBroadcast&lt;/upnp:class&gt;&lt;desc id="cdudn" nameSpace="urn:schemas-rinco
-nnetworks-com:metadata-1-0/"&gt;SA_RINCON65031_&lt;/desc&gt;&lt;/item&gt;&lt;/DIDL-Lite&gt;</CurrentURIMetaData>
-  <NextURI></NextURI>
-  <NextURIMetaData></NextURIMetaData>
-  <PlayMedium>NETWORK</PlayMedium>
-  <RecordMedium>NOT_IMPLEMENTED</RecordMedium>
-  <WriteStatus>NOT_IMPLEMENTED</WriteStatus>
-</u:GetMediaInfoResponse>
-21:59:46 INFO  Not switching to 'Blue Marlin', not playing 'SublimeFm
-
-GetPositionInfo
-<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <s:Body>
-    <u:GetPositionInfoResponse xmlns:u="urn:schemas-upnp-org:service:AVTransport:1">
-      <Track>1</Track>
-      <TrackDuration>0:00:00</TrackDuration>
-      <TrackMetaData>&lt;DIDL-Lite xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; xmlns:upnp=&quot;urn:schemas-upnp-org:metadata-1-0/upnp/&quot; xmlns:r=&quot;urn:schemas-rinconnetworks-com:metadata-1-0/&quot; xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/&quot;&gt;&lt;item id=&quot;-1&quot; parentID=&quot;-1&quot; restricted=&quot;true&quot;&gt;&lt;res protocolInfo=&quot;aac:*:application/octet-stream:*&quot;&gt;aac://82.201.47.68/SublimeFM&lt;/res&gt;&lt;r:streamContent&gt; - &lt;/r:streamContent&gt;&lt;dc:title&gt;SublimeFM&lt;/dc:title&gt;&lt;upnp:class&gt;object.item&lt;/upnp:class&gt;&lt;/item&gt;&lt;/DIDL-Lite&gt;</TrackMetaData>
-      <TrackURI>aac://82.201.47.68/SublimeFM</TrackURI>
-      <RelTime>0:00:07</RelTime>
-      <AbsTime>NOT_IMPLEMENTED</AbsTime>
-      <RelCount>2147483647</RelCount>
-      <AbsCount>2147483647</AbsCount>
-    </u:GetPositionInfoResponse>
-  </s:Body>
-</s:Envelope>SetURI

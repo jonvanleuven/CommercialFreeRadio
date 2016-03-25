@@ -58,6 +58,7 @@
     <Compile Include="Impl\StationDeepFm.cs" />
     <Compile Include="Impl\StationNpo1.cs" />
     <Compile Include="Impl\StationRandomizer.cs" />
+    <Compile Include="Impl\StationSkyRadio.cs" />
     <Compile Include="Impl\StationSublimeFm.cs" />
     <Compile Include="Impl\Station3fm.cs" />
     <Compile Include="Impl\StationBlueMarlin.cs" />
@@ -76,6 +77,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="log4netconfigverbose.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="log4netconfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>

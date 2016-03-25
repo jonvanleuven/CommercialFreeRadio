@@ -48,5 +48,11 @@ namespace CommercialFreeRadio.Test
         {
             Assert.AreEqual("192.168.99.99", new CommercialFreeRadio.Program.CommandLineArgument("/sonos=192.168.99.99".Split(' ')).SonosIp);
         }
+
+        [Test]
+        public void StationName()
+        {
+            Assert.AreEqual("3fm", new CommercialFreeRadio.Program.CommandLineArgument("/vlc=3fm".Split(' ')).StationName);
+        }
     }
 }

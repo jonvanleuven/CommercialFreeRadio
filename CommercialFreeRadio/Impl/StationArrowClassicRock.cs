@@ -5,8 +5,8 @@ namespace CommercialFreeRadio.Impl
     public class StationArrowClassicRock : IRadioStation
     {
         private readonly TimeSpanCache cache = new TimeSpanCache(new TimeSpan(0, 0, 5));
-        private string nowPlaying;
-        private DateTime sleepUntil = DateTime.Now;
+        private readonly TuneInNowPlayingFeed feed = new TuneInNowPlayingFeed("https://feed.tunein.com/profiles/s6702/nowplaying?itemToken=&partnerId=RadioTime&serial=9276ad87-a2e9-47c6-8e59-f04478dff520");
+        private Track nowPlaying;
 
         public string Name {
             get { return "Arrow Classic Rock"; }
@@ -16,27 +16,41 @@ namespace CommercialFreeRadio.Impl
         }
         public bool? IsPlayingCommercialBreak()
         {
-            if (sleepUntil > DateTime.Now)
-                return IsCommercialBreal( nowPlaying );
-            var result = cache.ReadCached(() => new TuneInNowPlayingFeed().Read("https://feed.tunein.com/profiles/s6702/nowplaying?itemToken=&partnerId=RadioTime&serial=9276ad87-a2e9-47c6-8e59-f04478dff520").Secondary.Title);
-            if (result != nowPlaying)
+            var result = cache.ReadCached(() => feed.Read().Secondary.Title) ?? string.Empty;
+            if (nowPlaying == null || nowPlaying.Title != result)
             {
-                Logger.Debug("Title: {0}", result);
-                sleepUntil = DateTime.Now.AddSeconds(30);
-            }   
-            nowPlaying = result;
-            return IsCommercialBreal( nowPlaying );
+                nowPlaying = new Track(result);
+                Logger.Debug("Track: {0}", nowPlaying);
+            }
+            return IsCommercialBreak( nowPlaying );
         }
 
-        public bool IsCommercialBreal(string title)
+        private static bool IsCommercialBreak(Track t)
         {
-            return title == "Roadrunner" || 
-                   title == "Rocktemple";
+            if (t == null)
+                return false;
+            return !t.Title.Contains(" - ") && DateTime.Now - t.Start > new TimeSpan(0, 0, 15);
         }
 
         public bool? IsMyStream(string uri)
         {
             return Uri == uri;
+        }
+
+        class Track
+        {
+            internal Track(string title)
+            {
+                Title = title;
+                Start = DateTime.Now;
+            }
+            public string Title { get; private set; }
+            public DateTime Start { get; private set; }
+
+            public override string ToString()
+            {
+                return string.Format("Title={0}, Start={1:HH:mm:ss}", Title, Start);
+            }
         }
     }
 }

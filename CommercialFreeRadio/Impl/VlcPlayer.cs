@@ -6,6 +6,7 @@ namespace CommercialFreeRadio.Impl
     {
         private const string Executable = @"""C:\Program Files (x86)\VideoLAN\VLC\vlc.exe""";
         private IRadioStation currentStation;
+
         public string Name
         {
             get { return string.Format("VLC player ({0})", Executable); }

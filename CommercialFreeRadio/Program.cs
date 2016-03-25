@@ -11,65 +11,57 @@ namespace CommercialFreeRadio
         static void Main(string[] argString)
         {
             var args = new CommandLineArgument(argString);
+            Logger.Init(args.UseVerbose);
+            var stations = new IRadioStation[]
+            {
+                new StationSublimeFm(),
+                new Station3fm(),
+                new StationArrowCaz(),
+                new StationArrowClassicRock(),
+                new StationWildFm(),
+                new StationSkyRadio()
+            };
             if (args.PrintUsage)
             {
-                args.ConsoleWriteUsage();
+                args.ConsoleWriteUsage(stations);
                 return;
             }
-            Logger.IsDebugEnabled = args.UseVerbose;
-            var stations = new IRadioStation[] { new StationSublimeFm(), new Station3fm(), new StationArrowCaz(), new StationArrowClassicRock(), new StationWildFm() };
 
-            IRadioStation station = args.UseRandom 
-                ? new StationRandomizer(stations) 
-                : new StationSublimeFm() as IRadioStation;
-            //IRadioStation station = new StationArrowClassicRock();
-//            var station = args.UseSonosPlayer 
-//                ? new StationSublimeFm()
-//                : new StationRandomizer(stations) as IRadioStation;
-            //var station = new Station3fm();
             var nonstop = new StationBlueMarlin(); //new StationDeepFm();
-            var player = CreatePlayer(args);
+            var player = CreatePlayer(args, stations);
             Logger.Info("Using player: " + player.Name);
             var poller = CreatePoller(new TimeSpan(0, 0, 1));
-            if (args.UseVlcPlayer)
-                player.Play(station);
-            var state = new State((fromType, toType) =>
+            var state = new State();
+            state.ChangeHandler = (fromType, toType) =>
             {
                 Logger.Info("--- {0}", toType);
                 if (fromType == SoundType.CommercialBreak)
                 {
                     if ((player.IsPlaying(nonstop) ?? true))
-                    {
-//                        var randomStation = station as StationRandomizer;
-//                        if (randomStation != null)
-//                            station = randomStation.SwitchStation();
-                        player.Play(station);
-                    }
+                        player.Play(state.Current);
                     else
-                        Logger.Info("Not switching to '" + station.Name + "', not playing '" + nonstop.Name + "'");
+                        Logger.Info("Not switching to '" + state.Current.Name + "', not playing '" + nonstop.Name + "'");
                 }
                 if (toType == SoundType.CommercialBreak)
                 {
-                    if ((player.IsPlaying(station) ?? true))
+                    if ((player.IsPlaying(state.Current) ?? true))
                         player.Play(nonstop);
                     else
-                        Logger.Info("Not switching to '" + nonstop.Name + "', not playing '" + station.Name + "'");
+                        Logger.Info("Not switching to '" + nonstop.Name + "', not playing '" + state.Current.Name + "'");
                 }
-            });
+            };
             foreach (var now in poller)
             {
                 try
                 {
-                    var nowPlaying = stations.SingleOrDefault(s => player.IsPlaying(s)??false);
-                    if (nowPlaying != null)
-                    {
-                        if( station.Name != nowPlaying.Name )
-                            Logger.Info("Switching to channel '{0}'", nowPlaying.Name);
-                        station = nowPlaying;
-                    }   
-                    var commercialPlaying = station.IsPlayingCommercialBreak();
+                    var current = stations.SingleOrDefault(s => player.IsPlaying(s) ?? false);
+                    if(!(player.IsPlaying(nonstop) ?? false))
+                        state.UpdateStation(current);
+                    if (state.Current == null)
+                        continue;
+                    var commercialPlaying = state.Current.IsPlayingCommercialBreak();
                     if (commercialPlaying == null)
-                        Logger.Info("Kan niet bepalen of er een commercial wordt afgespeeld, IsPlayingCommercialBreak van station '{0}' returned null", station.Name);
+                        Logger.Info("Kan niet bepalen of er een commercial wordt afgespeeld, IsPlayingCommercialBreak van station '{0}' returned null", state.Current.Name);
                     else if (commercialPlaying ?? false)
                         state.UpdateSoundType(SoundType.CommercialBreak);
                     else
@@ -83,32 +75,46 @@ namespace CommercialFreeRadio
             }
         }
 
-        private static IPlayer CreatePlayer(CommandLineArgument args)
+        private static IPlayer CreatePlayer(CommandLineArgument args, IEnumerable<IRadioStation> stations )
         {
             if (args.UseSonosPlayer)
                 return new SonosPlayer(new UpnpInterface(args.SonosIp), "Sonos player (" + args.SonosIp + ")");
-            if (args.UseVlcPlayer)
-                return new VlcPlayer();
-            return new EmptyPlayer();
+            var station = stations.SingleOrDefault(s => s.Name.Replace(" ", "").ToLower() == args.StationName.ToLower());
+            if (station == null)
+                throw new Exception("Invalid radio station name '" + args.StationName + "', valid stations: " + args.ValidRadioNames(stations));
+            var player = args.UseVlcPlayer ?  new VlcPlayer() : new EmptyPlayer() as IPlayer;
+            player.Play(station);
+            return player;
         }
 
         public class State
         {
-            private readonly Action<SoundType, SoundType> changeHandler;
-            public State(Action<SoundType, SoundType> changeHandler)
+            public State()
             {
                 Sound = SoundType.Music;
-                this.changeHandler = changeHandler;
             }
 
-            public SoundType Sound { get; private set; }
+            public Action<SoundType, SoundType> ChangeHandler { get; set; }
+
+            private SoundType Sound { get; set; }
 
             public void UpdateSoundType(SoundType type)
             {
                 if (type != Sound)
-                    changeHandler(Sound, type);
+                    ChangeHandler(Sound, type);
                 Sound = type;
             }
+
+            public void UpdateStation(IRadioStation station)
+            {
+                if (station == null && Current != null)
+                    Logger.Info("Player stopped playing '" + Current.Name + "'");
+                if (station != null && Current == null)
+                    Logger.Info("Player started playing '" + station.Name + "'");
+                Current = station;
+            }
+
+            public IRadioStation Current { get; private set; }
         }
 
         public enum SoundType
@@ -134,29 +140,43 @@ namespace CommercialFreeRadio
                 if (PrintUsage) return;
                 if (args == null) return;
                 UseSonosPlayer = args.Any(a => a.StartsWith("/sonos"));
-                UseVlcPlayer = args.Contains("/vlc");
+                UseVlcPlayer = args.Any(a => a.StartsWith("/vlc"));
                 UseVerbose = args.Contains("/verbose");
                 UseRandom = args.Contains("/random");
                 if (UseSonosPlayer)
-                    SonosIp = args.Where(a => a.StartsWith("/sonos") && a.Split('=').Length>1).Select(a => a.Split('=')[1]).FirstOrDefault();
+                    SonosIp = ArgumentValue("/sonos", args);
+                StationName = ArgumentValue("/vlc", args) ?? ArgumentValue("/nop", args) ?? string.Empty;
+            }
+
+            private string ArgumentValue(string arg, string[] args)
+            {
+                return args.Where(a => a.StartsWith(arg) && a.Split('=').Length > 1).Select(a => a.Split('=')[1]).FirstOrDefault();
             }
 
             public bool PrintUsage { get; private set; }
             public bool UseSonosPlayer { get; private set; }
             public string SonosIp { get; private set; }
             public bool UseVlcPlayer { get; private set; }
+            public string StationName { get; private set; }
             public bool UseVerbose { get; private set; }
             public bool UseRandom { get; private set; }
 
-            internal void ConsoleWriteUsage()
+            public string ValidRadioNames(IEnumerable<IRadioStation> stations)
             {
-                Console.WriteLine(@"Usage:
+                return string.Join(", ", stations.Select(s => s.Name.Replace(" ", "")));
+            }
+
+            internal void ConsoleWriteUsage(IEnumerable<IRadioStation> stations)
+            {
+                Console.WriteLine(string.Format(@"Usage:
   Player options:
    /sonos=<ip-address>     Use sonos player
-   /vlc                    Use VLC player 
+   /vlc=stationname        Use VLC player (stationnames: {0})
+   /nop=stationname        Use NOP player (stationnames: {0})
   Other options:
    [/verbose]              Print verbose
-   [/random]               Switch to other radio station after commercial break");
+   [/random]               EXPERIMENTAL: Switch to other radio station after commercial break",
+   ValidRadioNames(stations)));
             }
         }
     }
