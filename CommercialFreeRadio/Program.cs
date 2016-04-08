@@ -19,16 +19,26 @@ namespace CommercialFreeRadio
                 new StationArrowCaz(),
                 new StationArrowClassicRock(),
                 new StationWildFm(),
-                new StationSkyRadio()
+                new StationSkyRadio(),
+                //new StationRadio538()
+            };
+            var nonstopstations = new IRadioStation[]
+            {
+                new StationBlueMarlin(),
+                new StationDeepFm(),
+                new Station3fmAlternative()
             };
             if (args.PrintUsage)
             {
-                args.ConsoleWriteUsage(stations);
+                args.ConsoleWriteUsage(stations, nonstopstations);
                 return;
             }
 
-            var nonstop = new StationBlueMarlin(); //new StationDeepFm();
+            var nonstop = nonstopstations.SingleOrDefault(s => s.Name.Replace(" ", "").ToLower() == args.NonstopStationName.ToLower()) ?? nonstopstations.First();
+            Logger.Info("Nonstop station: '" + nonstop.Name + "'");
             var player = CreatePlayer(args, stations);
+            if(args.UseRandom)
+                player = new RandomPlayer(player, stations, new TimeSpan(2, 0, 0));
             Logger.Info("Using player: " + player.Name);
             var poller = CreatePoller(new TimeSpan(0, 0, 1));
             var state = new State();
@@ -146,6 +156,7 @@ namespace CommercialFreeRadio
                 if (UseSonosPlayer)
                     SonosIp = ArgumentValue("/sonos", args);
                 StationName = ArgumentValue("/vlc", args) ?? ArgumentValue("/nop", args) ?? string.Empty;
+                NonstopStationName = ArgumentValue("/nonstop", args) ?? string.Empty;
             }
 
             private string ArgumentValue(string arg, string[] args)
@@ -158,6 +169,7 @@ namespace CommercialFreeRadio
             public string SonosIp { get; private set; }
             public bool UseVlcPlayer { get; private set; }
             public string StationName { get; private set; }
+            public string NonstopStationName { get; private set; }
             public bool UseVerbose { get; private set; }
             public bool UseRandom { get; private set; }
 
@@ -166,17 +178,18 @@ namespace CommercialFreeRadio
                 return string.Join(", ", stations.Select(s => s.Name.Replace(" ", "")));
             }
 
-            internal void ConsoleWriteUsage(IEnumerable<IRadioStation> stations)
+            internal void ConsoleWriteUsage(IEnumerable<IRadioStation> stations, IEnumerable<IRadioStation> nonstopstations)
             {
                 Console.WriteLine(string.Format(@"Usage:
   Player options:
-   /sonos=<ip-address>     Use sonos player
-   /vlc=stationname        Use VLC player (stationnames: {0})
-   /nop=stationname        Use NOP player (stationnames: {0})
+   /sonos=<ip-address>      Use sonos player
+   /vlc=<stationname>       Use VLC player (stationnames: {0})
+   /nop=<stationname>       Use NOP player (stationnames: {0})
   Other options:
-   [/verbose]              Print verbose
-   [/random]               EXPERIMENTAL: Switch to other radio station after commercial break",
-   ValidRadioNames(stations)));
+   [/nonstop=<stationname>] Use this station during commercial breaks (stationnames: {1})
+   [/verbose]               Print verbose
+   [/random]                EXPERIMENTAL: Switch to other radio station after commercial break (every 2 hours)",
+   ValidRadioNames(stations), ValidRadioNames(nonstopstations)));
             }
         }
     }

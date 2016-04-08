@@ -10,9 +10,9 @@ namespace CommercialFreeRadio.Impl
     public class StationSkyRadio : IRadioStation
     {
         private readonly TimeSpanCache cache = new TimeSpanCache(new TimeSpan(0, 0, 5));
-        private readonly StationSkyApi api = new StationSkyApi();
-        private IList<Track> playlist = new List<Track>();
+        private readonly SkyRadioPlaylistApi api = new SkyRadioPlaylistApi();
         private Track current = null;
+        private DateTime sleepUntil = DateTime.Now;
 
         public string Name { get { return "Sky Radio"; } }
         public string Uri {
@@ -20,17 +20,21 @@ namespace CommercialFreeRadio.Impl
         }
         public bool? IsPlayingCommercialBreak()
         {
-            if (current != null && DateTime.Now < current.End.AddSeconds(-10))
-                return false;
+            if (sleepUntil > DateTime.Now)
+                return current == null;
 
-            playlist = cache.ReadCached(() => api.ReadPlayList());
+            var playlist = cache.ReadCached(() => api.ReadPlayList());
 
             var currentTrack = playlist.FirstOrDefault(track => track.Start < DateTime.Now && track.End > DateTime.Now);
             if( currentTrack == null )
                 currentTrack = playlist.FirstOrDefault(track => track.Start.AddSeconds(-10) < DateTime.Now && track.End.AddSeconds(10) > DateTime.Now);
 
-            if ( GetId(currentTrack) != GetId(current) )
+            if (GetId(currentTrack) != GetId(current))
+            {
                 Logger.Debug("Track: " + currentTrack);
+                if (currentTrack != null)
+                    sleepUntil = currentTrack.End.AddSeconds(-10);
+            }
             current = currentTrack;
             return current == null;
         }
@@ -42,10 +46,12 @@ namespace CommercialFreeRadio.Impl
 
         public bool? IsMyStream(string uri)
         {
+            if (uri.ToLower().Contains("skyradio"))
+                return true;
             return uri == Uri;
         }
 
-        private class StationSkyApi
+        private class SkyRadioPlaylistApi
         {
             public IList<Track> ReadPlayList()
             {
@@ -125,8 +131,8 @@ namespace CommercialFreeRadio.Impl
             }
             private Track() { }
             public string Id { get; private set; }
-            public String Title { get; private set; }
-            public String Artist { get; private set; }
+            public string Title { get; private set; }
+            public string Artist { get; private set; }
             public DateTime Start { get; private set; }
             public DateTime End { get; private set; }
 

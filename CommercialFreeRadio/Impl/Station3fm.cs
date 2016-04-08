@@ -46,6 +46,8 @@ namespace CommercialFreeRadio.Impl
 
         public bool? IsMyStream(string uri)
         {
+            if (uri.Contains("3fm-alternative"))
+                return false;
             return Uri == uri || uri.ToLower().Contains("3fm");
         }
 

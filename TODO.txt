@@ -11,6 +11,18 @@ V ChangeHandler
   V ArrowClassicRock
   V Wild FM (x-rincon-mp3radio://149.210.223.94/wildfm.mp3)
     https://feed.tunein.com/profiles/s77950/nowplaying?itemToken=eyJwIjpmYWxzZSwidCI6IjIwMTYtMDMtMTJUMTg6MzA6MjkuNTExNzIwNloifQ==&partnerId=RadioTime&serial=9276ad87-a2e9-47c6-8e59-f04478dff520
+  V SkyRadio
+    http://api.skyradiogroup.nl/sky-radio/api/playlist?type=21.json
+  - RTL Lounge radio: 
+    http://vip-icecast.538.lw.triple-it.nl/WEB08_MP3
+    https://feed.tunein.com/profiles/s115725/nowplaying?itemToken=&partnerId=RadioTime&serial=9276ad87-a2e9-47c6-8e59-f04478dff520
+  V 3FM alternative (zonder reclame?)
+    http://icecast.omroep.nl/3fm-alternative-mp3
+  V radio 538
+    http://vip-icecast.538.lw.triple-it.nl/RADIO538_MP3
+    https://feed.tunein.com/profiles/s6712/nowplaying?itemToken=&partnerId=RadioTime&serial=9276ad87-a2e9-47c6-8e59-f04478dff520
+
+
     
 V VlcPlayer gebruiken voor lokaal gebruik
 V Rename project naar CommercialFreeRadio
@@ -39,6 +51,7 @@ X new VlcPlayer(IRadiostation)
 - ChromecastPlayer
 - discover devices (http://www.codeproject.com/Articles/27992/NAT-Traversal-with-UPnP-in-C)
 V verbose off: log wel debug naar log file
-
+V nonstop=bluemarlin of deepfm
 
 V TextToSpeech exe/app -> Sonos
+- https://github.com/Xeroday/Spotify-Ad-Blocker/ Hoe werkt dit? Stream url door te sturen naar Sonos?

@@ -11,7 +11,6 @@ namespace CommercialFreeRadio.Impl
         private readonly TuneInNowPlayingFeed feed = new TuneInNowPlayingFeed("https://feed.tunein.com/profiles/s77950/nowplaying?itemToken=eyJwIjpmYWxzZSwidCI6IjIwMTYtMDMtMTJUMTg6MzA6MjkuNTExNzIwNloifQ==&partnerId=RadioTime&serial=9276ad87-a2e9-47c6-8e59-f04478dff520");
         private readonly RememberTrackList tracks = new RememberTrackList(@"wildFm_temp.txt");
         private Track nowPlaying;
-        private DateTime sleepUntil = DateTime.Now;
 
         public string Name
         {
@@ -23,8 +22,6 @@ namespace CommercialFreeRadio.Impl
         }
         public bool? IsPlayingCommercialBreak()
         {
-            if (sleepUntil > DateTime.Now)
-                return IsCommercialBreal(nowPlaying);
             var result = cache.ReadCached(() =>
             {
                 var feedResult = feed.Read();
@@ -44,8 +41,6 @@ namespace CommercialFreeRadio.Impl
                     Start = nowPlaying == null ? (DateTime?) null : DateTime.Now,
                     End = nowPlaying != null && found.HasValue ? DateTime.Now+found : null
                 };
-                if( nowPlaying.End.HasValue )
-                    sleepUntil = nowPlaying.End.Value.AddSeconds(-30);
                 Logger.Debug("Title: {0}", nowPlaying);
             }
             return IsCommercialBreal(nowPlaying);

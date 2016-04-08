@@ -86,7 +86,7 @@ namespace CommercialFreeRadio.Impl
 
         private XElement SoapCall(string path, string soapAction, string bodyXml)
         {
-            Logger.Debug("SoapCall: {0}", soapAction);
+            Logger.Debug("SoapCall calling action: {0}", soapAction);
             var wr = WebRequest.Create("http://" + ip + ":1400/" + path);
             var xml = @"<?xml version=""1.0"" encoding=""utf-8""?><s:Envelope s:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/"" xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/""><s:Body>" + bodyXml + "</s:Body></s:Envelope>";
             wr.ContentType = "text/xml;charset=utf-8";
@@ -96,17 +96,15 @@ namespace CommercialFreeRadio.Impl
             wr.Method = "POST";
             wr.GetRequestStream().Write(Encoding.UTF8.GetBytes(xml), 0, xml.Length);
 
-            string soapResult;
             using (var webResponse = wr.GetResponse())
             {
                 using (var rd = new StreamReader(webResponse.GetResponseStream()))
                 {
-                    soapResult = rd.ReadToEnd();
+                    var result = XDocument.Parse(rd.ReadToEnd()).Elements().First().Elements().First().Elements().First(); //response node
+                    Logger.Debug("SoapCall result: " + result.ToString().Replace("\n", ""));
+                    return result;
                 }
             }
-            var result = XDocument.Parse(soapResult).Elements().First().Elements().First().Elements().First(); //response node
-            Logger.Debug(result);
-            return result;
         }
 
         public class GetTransportInfoResponse

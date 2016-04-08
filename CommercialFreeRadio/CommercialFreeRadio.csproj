@@ -52,12 +52,14 @@
     <Compile Include="Impl\EmptyPlayer.cs" />
     <Compile Include="Impl\Logger.cs" />
     <Compile Include="Impl\Poller.cs" />
+    <Compile Include="Impl\RandomPlayer.cs" />
     <Compile Include="Impl\SonosPlayer.cs" />
     <Compile Include="Impl\StationArrowCaz.cs" />
+    <Compile Include="Impl\Station3fmAlternative.cs" />
+    <Compile Include="Impl\StationRadio538.cs" />
     <Compile Include="Impl\StationArrowClassicRock.cs" />
     <Compile Include="Impl\StationDeepFm.cs" />
     <Compile Include="Impl\StationNpo1.cs" />
-    <Compile Include="Impl\StationRandomizer.cs" />
     <Compile Include="Impl\StationSkyRadio.cs" />
     <Compile Include="Impl\StationSublimeFm.cs" />
     <Compile Include="Impl\Station3fm.cs" />
