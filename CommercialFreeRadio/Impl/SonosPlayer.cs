@@ -26,6 +26,7 @@ namespace CommercialFreeRadio.Impl
             }
             player.SetAVTransportURI(station.Uri);
             player.Play();
+            isplayingCache.Clear();
         }
 
         public bool? IsPlaying(IRadioStation station)
