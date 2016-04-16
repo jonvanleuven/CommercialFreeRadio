@@ -50,6 +50,7 @@
     <Compile Include="CommandLineArgumentTest.cs" />
     <Compile Include="Impl\Playlist3FmInterfaceTest.cs" />
     <Compile Include="Impl\PlaylistSublimeFmInterfaceTest.cs" />
+    <Compile Include="Impl\UpnpInterfaceTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

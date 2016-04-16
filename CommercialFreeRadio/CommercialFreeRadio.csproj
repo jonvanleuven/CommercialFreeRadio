@@ -70,6 +70,7 @@
     <Compile Include="IDeviceScanner.cs" />
     <Compile Include="Impl\VlcPlayer.cs" />
     <Compile Include="IPlayer.cs" />
+    <Compile Include="ITuneinRadioStation.cs" />
     <Compile Include="IRadioStation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

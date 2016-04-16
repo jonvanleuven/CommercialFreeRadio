@@ -26,7 +26,7 @@ V ChangeHandler
     
 V VlcPlayer gebruiken voor lokaal gebruik
 V Rename project naar CommercialFreeRadio
-- Publish in GitHub
+V Publish in GitHub
 V ipnpInterface: soap template
 V sublimefm: set einddatum track voor snellere lookup
 V als sonos niet speelt: geen play
@@ -41,7 +41,7 @@ V CommandLineArguments class
 V ipnpInterface: add GetMediaInfo en GetPositionInfo ?
 V SonosPlayer.IsPlaying implementatie
 X IPlayer.CurrentRadioStation => IRadioStation
-- RandomPlayer implements IPlayer: delegate wrapper die random van zender wisselt
+V RandomPlayer implements IPlayer: delegate wrapper die random van zender wisselt
 X IRadioStation: IEnumerable<string> Uri { get; }
 V support all stations: als sonos switcht van zender dan die oppakken
 - queue station op playlist en next i.p.v. setUri->play ?
@@ -52,6 +52,8 @@ X new VlcPlayer(IRadiostation)
 - discover devices (http://www.codeproject.com/Articles/27992/NAT-Traversal-with-UPnP-in-C)
 V verbose off: log wel debug naar log file
 V nonstop=bluemarlin of deepfm
+- Log analyseren en verbeteringen doorvoeren
+- Tonen logo van de zender: SonosStream werkt nog niet geheel correct. Hoe alle x-sonosapi-stream opvragen? GetFavourites? TuneInStationBase?
 
 V TextToSpeech exe/app -> Sonos
 - https://github.com/Xeroday/Spotify-Ad-Blocker/ Hoe werkt dit? Stream url door te sturen naar Sonos?

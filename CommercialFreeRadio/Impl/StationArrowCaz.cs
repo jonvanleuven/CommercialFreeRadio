@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Json;
 
 namespace CommercialFreeRadio.Impl
 {
-    public class StationArrowCaz : IRadioStation
+    public class StationArrowCaz : IRadioStation, ITuneinRadioStation
     {
         private readonly PlaylistArrowCazInterface playlist;
 
@@ -21,6 +21,9 @@ namespace CommercialFreeRadio.Impl
         public string Uri {
             get { return "x-rincon-mp3radio://stream.arrowcaz.nl/caz128kmp3"; }
         }
+        public int TuneinId { get { return 44513; } }
+        public string TuneinTitle { get { return "Arrow Caz"; } }
+
         public bool? IsPlayingCommercialBreak()
         {
             var current = playlist.ReadCurrentTrack();

@@ -1,6 +1,6 @@
 namespace CommercialFreeRadio.Impl
 {
-    public class Station3fmAlternative : IRadioStation
+    public class Station3fmAlternative : IRadioStation, ITuneinRadioStation
     {
         public string Name
         {
@@ -10,6 +10,9 @@ namespace CommercialFreeRadio.Impl
         {
             get { return "x-rincon-mp3radio://icecast.omroep.nl/3fm-alternative-mp3"; }
         }
+        public int TuneinId { get { return 96203; } }
+        public string TuneinTitle { get { return "NPO 3FM Alternative"; } }
+
         public bool? IsPlayingCommercialBreak()
         {
             return false;

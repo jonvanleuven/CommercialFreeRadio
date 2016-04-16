@@ -10,7 +10,7 @@ using System.Xml.XPath;
 
 namespace CommercialFreeRadio.Impl
 {
-    public class StationSublimeFm : IRadioStation
+    public class StationSublimeFm : IRadioStation, ITuneinRadioStation
     {
         private readonly PlaylistSublimeFmInterface playlist;
         private string currentTrackId;
@@ -27,8 +27,10 @@ namespace CommercialFreeRadio.Impl
 
         public string Uri
         {
-            get { return "x-rincon-mp3radio://82.201.47.68/SublimeFM2"; }
+            get { return "x-rincon-mp3radio://stream01.sublimefm.nl/SublimeFM_mp3"; }
         }
+        public int TuneinId { get { return 25777; } }
+        public string TuneinTitle { get { return "Sublime FM"; } }
 
         public bool? IsPlayingCommercialBreak()
         {
@@ -54,7 +56,9 @@ namespace CommercialFreeRadio.Impl
                 return true;
             if (uri == "aac://82.201.47.68/SublimeFM")
                 return true;
-            if (uri == "aac://stream01.sublimefm.nl/SublimeFM_aac")
+            if (uri.EndsWith(".sublimefm.nl/SublimeFM_aac"))
+                return true;
+            if (uri.EndsWith("://82.201.47.68/SublimeFM2"))
                 return true;
             return false;
         }
@@ -85,7 +89,7 @@ namespace CommercialFreeRadio.Impl
         {
             private readonly TimeSpanCache cache;
             private readonly IXmlInterfaceSublimeFm datareader;
-            private readonly TimeSpan delay = new TimeSpan(0, 0, 8); //audiostream loop 8 seconden achter op interface
+            private readonly TimeSpan delay = new TimeSpan(0, 0, 7); //audiostream loop 7 seconden achter op interface
 
             public PlaylistSublimeFmInterface(IXmlInterfaceSublimeFm datareader = null)
             {
@@ -167,6 +171,7 @@ namespace CommercialFreeRadio.Impl
                                 return TrackType.News;
                             case "Toth":
                             case "Jingles":
+                            case "CUPS":
                                 return TrackType.Jingle;
                         }
                         switch (CategoryCode)
@@ -174,6 +179,7 @@ namespace CommercialFreeRadio.Impl
                             case "442":
                             case "410":
                             case "225":
+                            case "389":
                                 return TrackType.Commercial;
                         }
                         if (!string.IsNullOrEmpty(Artist) && !string.IsNullOrEmpty(Title))

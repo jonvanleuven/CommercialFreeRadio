@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -36,12 +37,12 @@ namespace CommercialFreeRadio.Impl
             return ParseInt(GetElementValue(xml, "CurrentVolume")).Value;
         }
 
-        public void SetAVTransportURI(string uri)
+        public void SetAVTransportURI(string uri, string uriMetadata = null)
         {
             SoapCall(
                 "MediaRenderer/AVTransport/Control",
                 "urn:schemas-upnp-org:service:AVTransport:1#SetAVTransportURI",
-                @"<u:SetAVTransportURI xmlns:u=""urn:schemas-upnp-org:service:AVTransport:1""><InstanceID>0</InstanceID><CurrentURI>" + uri + "</CurrentURI><CurrentURIMetaData></CurrentURIMetaData></u:SetAVTransportURI>");
+                @"<u:SetAVTransportURI xmlns:u=""urn:schemas-upnp-org:service:AVTransport:1""><InstanceID>0</InstanceID><CurrentURI>" + XmlEscape(uri) + "</CurrentURI><CurrentURIMetaData>" + XmlEscape(uriMetadata ?? string.Empty) + "</CurrentURIMetaData></u:SetAVTransportURI>");
         }
 
         public void Play()
@@ -82,6 +83,15 @@ namespace CommercialFreeRadio.Impl
                 "MediaRenderer/AVTransport/Control",
                 "urn:schemas-upnp-org:service:AVTransport:1#GetPositionInfo",
                 @"<u:GetPositionInfo xmlns:u=""urn:schemas-upnp-org:service:AVTransport:1""><InstanceID>0</InstanceID></u:GetPositionInfo>"));
+        }
+
+        public static string XmlEscape(string unescaped)
+        {
+            if (unescaped == null)
+                return unescaped;
+            var node = new XmlDocument().CreateElement("root");
+            node.InnerText = unescaped;
+            return node.InnerXml;
         }
 
         private XElement SoapCall(string path, string soapAction, string bodyXml)
@@ -128,6 +138,7 @@ namespace CommercialFreeRadio.Impl
                 NrTracks = GetElementValue(xml, "NrTracks");
                 MediaDuration = GetElementValue(xml, "MediaDuration");
                 CurrentURI = GetElementValue(xml, "CurrentURI");
+                CurrentURIMetaData = GetElementValue(xml, "CurrentURIMetaData");
                 NextURI = GetElementValue(xml, "NextURI");
                 NextURIMetaData = GetElementValue(xml, "NextURIMetaData");
                 PlayMedium = GetElementValue(xml, "PlayMedium");
@@ -137,6 +148,7 @@ namespace CommercialFreeRadio.Impl
             public string NrTracks { get; private set; }
             public string MediaDuration { get; private set; }
             public string CurrentURI { get; private set; }
+            public string CurrentURIMetaData { get; private set; }
             public string NextURI { get; private set; }
             public string NextURIMetaData { get; private set; }
             public string PlayMedium { get; private set; }

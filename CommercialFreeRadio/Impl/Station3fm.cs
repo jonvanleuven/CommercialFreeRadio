@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Json;
 
 namespace CommercialFreeRadio.Impl
 {
-    public class Station3fm : IRadioStation
+    public class Station3fm : IRadioStation, ITuneinRadioStation
     {
         private readonly Playlist3FmInterface playlist;
         public Station3fm(IJsonInterface3Fm reader = null)
@@ -24,6 +24,8 @@ namespace CommercialFreeRadio.Impl
         {
             get { return "x-rincon-mp3radio://icecast.omroep.nl/3fm-bb-mp3"; }
         }
+        public int TuneinId { get { return 6707; } }
+        public string TuneinTitle { get { return "NPO 3FM Serious Radio"; } }
 
         public bool? IsPlayingCommercialBreak()
         {
