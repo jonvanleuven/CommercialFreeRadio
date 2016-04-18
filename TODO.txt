@@ -53,7 +53,9 @@ X new VlcPlayer(IRadiostation)
 V verbose off: log wel debug naar log file
 V nonstop=bluemarlin of deepfm
 - Log analyseren en verbeteringen doorvoeren
-- Tonen logo van de zender: SonosStream werkt nog niet geheel correct. Hoe alle x-sonosapi-stream opvragen? GetFavourites? TuneInStationBase?
+V Tonen logo van de zender: SonosStream werkt nog niet geheel correct. Hoe alle x-sonosapi-stream opvragen? GetFavourites? 
+  TuneInStationBase: url bepalen a.d.v. http://stream.radiotime.com/listen.stream?streamIds=68400956,68400957&rti=dihyG20zNEJVQAc8AktHRUY%2bR1FQWRcmXhcGSkcXJgcTQEMjN1oMDFMGInQQRlAzWwcVDFNORD4WHARyEkhfRwEWWHRqGAVABUAFUVhQYgI%3d%7e%7e%7e
+V TuneinNowPlayingFeed: constructor met id en guid genereren?
 
 V TextToSpeech exe/app -> Sonos
 - https://github.com/Xeroday/Spotify-Ad-Blocker/ Hoe werkt dit? Stream url door te sturen naar Sonos?

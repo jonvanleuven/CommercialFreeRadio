@@ -11,7 +11,6 @@ namespace CommercialFreeRadio.Impl
             get { return "x-rincon-mp3radio://sc.deep.fm/sd"; }
         }
         public int TuneinId { get { return 54426; } }
-        public string TuneinTitle { get { return "DeepFM"; } }
 
         public bool? IsPlayingCommercialBreak()
         {

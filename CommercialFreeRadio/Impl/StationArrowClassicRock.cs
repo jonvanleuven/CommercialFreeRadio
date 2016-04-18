@@ -5,7 +5,7 @@ namespace CommercialFreeRadio.Impl
     public class StationArrowClassicRock : IRadioStation, ITuneinRadioStation
     {
         private readonly TimeSpanCache cache = new TimeSpanCache(new TimeSpan(0, 0, 5));
-        private readonly TuneInNowPlayingFeed feed = new TuneInNowPlayingFeed("https://feed.tunein.com/profiles/s6702/nowplaying?itemToken=&partnerId=RadioTime&serial=9276ad87-a2e9-47c6-8e59-f04478dff520");
+        private readonly TuneInNowPlayingFeed feed = new TuneInNowPlayingFeed();
         private Track nowPlaying;
 
         public string Name {
@@ -15,11 +15,10 @@ namespace CommercialFreeRadio.Impl
             get { return "x-rincon-mp3radio://91.221.151.155/"; }
         }
         public int TuneinId { get { return 6702; } }
-        public string TuneinTitle { get { return "Arrow Classic Rock"; } }
 
         public bool? IsPlayingCommercialBreak()
         {
-            var result = cache.ReadCached(() => feed.Read().Secondary.Title) ?? string.Empty;
+            var result = cache.ReadCached(() => feed.Read(TuneinId).Secondary.Title) ?? string.Empty;
             if (nowPlaying == null || nowPlaying.Title != result)
             {
                 nowPlaying = new Track(result);

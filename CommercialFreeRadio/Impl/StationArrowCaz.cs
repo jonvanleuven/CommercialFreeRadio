@@ -22,7 +22,6 @@ namespace CommercialFreeRadio.Impl
             get { return "x-rincon-mp3radio://stream.arrowcaz.nl/caz128kmp3"; }
         }
         public int TuneinId { get { return 44513; } }
-        public string TuneinTitle { get { return "Arrow Caz"; } }
 
         public bool? IsPlayingCommercialBreak()
         {

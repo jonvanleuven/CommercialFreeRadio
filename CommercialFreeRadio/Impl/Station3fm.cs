@@ -25,7 +25,6 @@ namespace CommercialFreeRadio.Impl
             get { return "x-rincon-mp3radio://icecast.omroep.nl/3fm-bb-mp3"; }
         }
         public int TuneinId { get { return 6707; } }
-        public string TuneinTitle { get { return "NPO 3FM Serious Radio"; } }
 
         public bool? IsPlayingCommercialBreak()
         {

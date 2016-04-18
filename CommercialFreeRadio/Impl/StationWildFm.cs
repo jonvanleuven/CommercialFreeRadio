@@ -8,7 +8,7 @@ namespace CommercialFreeRadio.Impl
     public class StationWildFm : IRadioStation, ITuneinRadioStation
     {
         private readonly TimeSpanCache cache = new TimeSpanCache(new TimeSpan(0, 0, 5));
-        private readonly TuneInNowPlayingFeed feed = new TuneInNowPlayingFeed("https://feed.tunein.com/profiles/s77950/nowplaying?itemToken=eyJwIjpmYWxzZSwidCI6IjIwMTYtMDMtMTJUMTg6MzA6MjkuNTExNzIwNloifQ==&partnerId=RadioTime&serial=9276ad87-a2e9-47c6-8e59-f04478dff520");
+        private readonly TuneInNowPlayingFeed feed = new TuneInNowPlayingFeed();
         private readonly RememberTrackList tracks = new RememberTrackList(@"wildFm_temp.txt");
         private Track nowPlaying;
 
@@ -21,13 +21,12 @@ namespace CommercialFreeRadio.Impl
             get { return "x-rincon-mp3radio://149.210.223.94/wildfm.mp3"; }
         }
         public int TuneinId { get { return 77950; } }
-        public string TuneinTitle { get { return "Wild FM"; } }
 
         public bool? IsPlayingCommercialBreak()
         {
             var result = cache.ReadCached(() =>
             {
-                var feedResult = feed.Read();
+                var feedResult = feed.Read(TuneinId);
                 return (feedResult != null && feedResult.Secondary != null) ? feedResult.Secondary.Title : null;
             });
 

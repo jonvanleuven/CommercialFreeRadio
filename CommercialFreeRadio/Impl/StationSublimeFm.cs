@@ -30,7 +30,6 @@ namespace CommercialFreeRadio.Impl
             get { return "x-rincon-mp3radio://stream01.sublimefm.nl/SublimeFM_mp3"; }
         }
         public int TuneinId { get { return 25777; } }
-        public string TuneinTitle { get { return "Sublime FM"; } }
 
         public bool? IsPlayingCommercialBreak()
         {

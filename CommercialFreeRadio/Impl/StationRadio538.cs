@@ -5,7 +5,7 @@ namespace CommercialFreeRadio.Impl
     public class StationRadio538 : IRadioStation, ITuneinRadioStation
     {
         private readonly TimeSpanCache cache = new TimeSpanCache(new TimeSpan(0, 0, 5));
-        private readonly TuneInNowPlayingFeed feed = new TuneInNowPlayingFeed("https://feed.tunein.com/profiles/s6712/nowplaying?itemToken=&partnerId=RadioTime&serial=9276ad87-a2e9-47c6-8e59-f04478dff520");
+        private readonly TuneInNowPlayingFeed feed = new TuneInNowPlayingFeed();
         private Track nowPlaying;
 
         public string Name {
@@ -15,16 +15,16 @@ namespace CommercialFreeRadio.Impl
             get { return "x-rincon-mp3radio://vip-icecast.538.lw.triple-it.nl/RADIO538_MP3"; }
         }
         public int TuneinId { get { return 6712; } }
-        public string TuneinTitle { get { return "Radio 538"; } }
 
         public bool? IsPlayingCommercialBreak()
         {
-            var result = cache.ReadCached(() => feed.Read().Secondary.Title) ?? string.Empty;
+            var result = cache.ReadCached(() => feed.Read(TuneinId).Secondary.Title) ?? string.Empty;
             if (nowPlaying == null || nowPlaying.Title != result)
             {
                 nowPlaying = new Track(result);
                 Logger.Debug("Track: {0}", nowPlaying);
             }
+            //in progress.......
             return IsCommercialBreak( nowPlaying );
         }
 

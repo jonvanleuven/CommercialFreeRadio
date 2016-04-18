@@ -11,7 +11,6 @@ namespace CommercialFreeRadio.Impl
             get { return "x-rincon-mp3radio://s3.sonicabroadcast.com:8635/"; }
         }
         public int TuneinId { get { return 140897; } }
-        public string TuneinTitle { get { return "Blue Marlin Ibiza"; } }
 
         public bool? IsPlayingCommercialBreak()
         {

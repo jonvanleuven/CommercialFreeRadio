@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Json;
@@ -7,19 +8,16 @@ namespace CommercialFreeRadio.Impl
 {
     public class TuneInNowPlayingFeed
     {
-        private readonly string url;
-        public TuneInNowPlayingFeed(string url)
+        public RootObject Read(int id)
         {
-            this.url = url;
-        }
-
-        public RootObject Read()
-        {
+            var serial = Guid.NewGuid().ToString(); //"9276ad87-a2e9-47c6-8e59-f04478dff520"
+            var url = string.Format("https://feed.tunein.com/profiles/s{0}/nowplaying?itemToken=&partnerId=RadioTime&serial={1}", id, serial);
             var ser = new DataContractJsonSerializer(typeof(RootObject));
-            return ((RootObject)ser.ReadObject(new MemoryStream(ReadJsonData())));
+            return ((RootObject)ser.ReadObject(new MemoryStream(ReadJsonData(url))));
         }
-        private byte[] ReadJsonData()
+        private static byte[] ReadJsonData(string url)
         {
+            Console.WriteLine(url);
             Logger.Debug(url);
             var req = WebRequest.Create(url);
             var response = req.GetResponse();
