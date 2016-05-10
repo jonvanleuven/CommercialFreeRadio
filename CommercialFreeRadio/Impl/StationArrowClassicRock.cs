@@ -7,6 +7,7 @@ namespace CommercialFreeRadio.Impl
         private readonly TimeSpanCache cache = new TimeSpanCache(new TimeSpan(0, 0, 5));
         private readonly TuneInNowPlayingFeed feed = new TuneInNowPlayingFeed();
         private Track nowPlaying;
+        private DateTime? noSongSince;
 
         public string Name {
             get { return "Arrow Classic Rock"; }
@@ -24,14 +25,20 @@ namespace CommercialFreeRadio.Impl
                 nowPlaying = new Track(result);
                 Logger.Debug("Track: {0}", nowPlaying);
             }
-            return IsCommercialBreak( nowPlaying );
+            var isSong = IsSong(nowPlaying);
+            if (isSong)
+                noSongSince = null;
+            if (!isSong && noSongSince == null)
+                noSongSince = DateTime.Now;
+
+            return !isSong && DateTime.Now - noSongSince > new TimeSpan(0, 0, 20);
         }
 
-        private static bool IsCommercialBreak(Track t)
+        private static bool IsSong(Track t)
         {
             if (t == null)
-                return false;
-            return !t.Title.Contains(" - ") && DateTime.Now - t.Start > new TimeSpan(0, 0, 15);
+                return true;
+            return t.Title.Contains(" - ");
         }
 
         public bool? IsMyStream(string uri)

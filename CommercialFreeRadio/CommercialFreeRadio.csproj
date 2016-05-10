@@ -53,6 +53,7 @@
     <Compile Include="Impl\Logger.cs" />
     <Compile Include="Impl\Poller.cs" />
     <Compile Include="Impl\RandomPlayer.cs" />
+    <Compile Include="Impl\Recorder.cs" />
     <Compile Include="Impl\SonosPlayer.cs" />
     <Compile Include="Impl\StationArrowCaz.cs" />
     <Compile Include="Impl\Station3fmAlternative.cs" />

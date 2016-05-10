@@ -45,10 +45,10 @@ namespace CommercialFreeRadio.Impl
                 };
                 Logger.Debug("Title: {0}", nowPlaying);
             }
-            return IsCommercialBreal(nowPlaying);
+            return IsCommercialBreak(nowPlaying);
         }
 
-        private bool IsCommercialBreal(Track track)
+        private bool IsCommercialBreak(Track track)
         {
             if (track == null)
                 return false;

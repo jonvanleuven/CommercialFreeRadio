@@ -69,6 +69,9 @@ namespace CommercialFreeRadio
                         state.UpdateStation(current);
                     if (state.Current == null)
                         continue;
+//                    if(state.Current.Name != "Wild FM")
+//                        stations.Single(s => s.Name == "Wild FM").IsPlayingCommercialBreak(); //TEMP: remember lijst aanvullen
+
                     var commercialPlaying = state.Current.IsPlayingCommercialBreak();
                     if (commercialPlaying == null)
                         Logger.Info("Kan niet bepalen of er een commercial wordt afgespeeld, IsPlayingCommercialBreak van station '{0}' returned null", state.Current.Name);
@@ -93,6 +96,8 @@ namespace CommercialFreeRadio
             if (station == null)
                 throw new Exception("Invalid radio station name '" + args.StationName + "', valid stations: " + args.ValidRadioNames(stations));
             var player = args.UseVlcPlayer ?  new VlcPlayer() : new EmptyPlayer() as IPlayer;
+            if (args.UseRecorder)
+                player = new Recorder(player, args.RecordDirectory, stations);
             player.Play(station);
             return player;
         }
@@ -153,6 +158,9 @@ namespace CommercialFreeRadio
                 UseVlcPlayer = args.Any(a => a.StartsWith("/vlc"));
                 UseVerbose = args.Contains("/verbose");
                 UseRandom = args.Contains("/random");
+                UseRecorder = args.Any(a => a.StartsWith("/recorder"));
+                if( UseRecorder )
+                    RecordDirectory = ArgumentValue("/recorder", args)??@"d:\temp";
                 if (UseSonosPlayer)
                     SonosIp = ArgumentValue("/sonos", args);
                 StationName = ArgumentValue("/vlc", args) ?? ArgumentValue("/nop", args) ?? string.Empty;
@@ -172,6 +180,8 @@ namespace CommercialFreeRadio
             public string NonstopStationName { get; private set; }
             public bool UseVerbose { get; private set; }
             public bool UseRandom { get; private set; }
+            public bool UseRecorder { get; private set; }
+            public string RecordDirectory { get; set; }
 
             public string ValidRadioNames(IEnumerable<IRadioStation> stations)
             {
@@ -188,7 +198,8 @@ namespace CommercialFreeRadio
   Other options:
    [/nonstop=<stationname>] Use this station during commercial breaks (stationnames: {1})
    [/verbose]               Print verbose
-   [/random]                EXPERIMENTAL: Switch to other radio station after commercial break (every 2 hours)",
+   [/random]                EXPERIMENTAL: Switch to other radio station after commercial break (every 2 hours)
+   [/recorder]              EXPERIMENTAL: Record stream as mp3 to d:\temp\",
    ValidRadioNames(stations), ValidRadioNames(nonstopstations)));
             }
         }

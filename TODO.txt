@@ -21,6 +21,11 @@ V ChangeHandler
   V radio 538
     http://vip-icecast.538.lw.triple-it.nl/RADIO538_MP3
     https://feed.tunein.com/profiles/s6712/nowplaying?itemToken=&partnerId=RadioTime&serial=9276ad87-a2e9-47c6-8e59-f04478dff520
+  - Pinguin radio
+    http://www.pinguinplayer.com/
+    http://www.pinguinplayer.com/index.php?c=PinguinRadio&_=1461155007263
+    http://pinguinradio.com/sidebar/prinfo/data/track-pinguin.json
+    http://178.18.137.245/;stream.mp3
 
 
     
@@ -53,9 +58,9 @@ X new VlcPlayer(IRadiostation)
 V verbose off: log wel debug naar log file
 V nonstop=bluemarlin of deepfm
 - Log analyseren en verbeteringen doorvoeren
-V Tonen logo van de zender: SonosStream werkt nog niet geheel correct. Hoe alle x-sonosapi-stream opvragen? GetFavourites? 
-  TuneInStationBase: url bepalen a.d.v. http://stream.radiotime.com/listen.stream?streamIds=68400956,68400957&rti=dihyG20zNEJVQAc8AktHRUY%2bR1FQWRcmXhcGSkcXJgcTQEMjN1oMDFMGInQQRlAzWwcVDFNORD4WHARyEkhfRwEWWHRqGAVABUAFUVhQYgI%3d%7e%7e%7e
+V Tonen logo van de zender: Sonosplayer tunein stations (op basis van id) laten afspelen ipv url
 V TuneinNowPlayingFeed: constructor met id en guid genereren?
+- Console colors: http://www.dotnetperls.com/console-color
 
 V TextToSpeech exe/app -> Sonos
 - https://github.com/Xeroday/Spotify-Ad-Blocker/ Hoe werkt dit? Stream url door te sturen naar Sonos?

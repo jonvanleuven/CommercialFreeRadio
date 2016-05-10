@@ -53,11 +53,7 @@ namespace CommercialFreeRadio.Impl
         {
             if (uri == Uri)
                 return true;
-            if (uri == "aac://82.201.47.68/SublimeFM")
-                return true;
-            if (uri.EndsWith(".sublimefm.nl/SublimeFM_aac"))
-                return true;
-            if (uri.EndsWith("://82.201.47.68/SublimeFM2"))
+            if (uri.ToLower().Contains("sublimefm"))
                 return true;
             return false;
         }
