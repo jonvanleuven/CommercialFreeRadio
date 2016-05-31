@@ -107,9 +107,9 @@ namespace CommercialFreeRadio.Impl
             File.Move(dest, f);
         }
 
-        public bool? IsPlaying(IRadioStation station)
+        public bool? IsPlaying(IRadioStation s)
         {
-            return player.IsPlaying(station);
+            return player.IsPlaying(s);
         }
     }
 //
