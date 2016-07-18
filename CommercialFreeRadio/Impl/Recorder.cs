@@ -90,19 +90,27 @@ namespace CommercialFreeRadio.Impl
 
         private void PostProcessFile(string f)
         {
+            var secondsToRemoveFromStart = 0;
             var secondsToRemoveFromEnd = 0;
             if (f.Contains("Sublime"))
+            {
+                secondsToRemoveFromStart = 1;
                 secondsToRemoveFromEnd = 4;
+            }
             if (f.Contains("Sky"))
+            {
+                secondsToRemoveFromStart = 3;
                 secondsToRemoveFromEnd = 51;
-            if (secondsToRemoveFromEnd == 0)
+            }
+            if (secondsToRemoveFromStart == 0 && secondsToRemoveFromEnd == 0)
                 return;
             var dest = f + "_temp";
             var content = File.ReadAllBytes(filename);
-            var takeBytes = content.Length - (secondsToRemoveFromEnd*17000);
-            if (takeBytes < 0)
+            var bytesToRemoveFromStart = secondsToRemoveFromStart*17000;
+            var bytesToRemoveFromEnd = secondsToRemoveFromEnd * 17000;
+            if (bytesToRemoveFromStart + bytesToRemoveFromEnd > content.Length)
                 return;
-            File.WriteAllBytes(dest, content.Take(takeBytes).ToArray());
+            File.WriteAllBytes(dest, content.Skip(bytesToRemoveFromStart).Take(content.Length - bytesToRemoveFromEnd - bytesToRemoveFromStart).ToArray());
             File.Delete(f);
             File.Move(dest, f);
         }

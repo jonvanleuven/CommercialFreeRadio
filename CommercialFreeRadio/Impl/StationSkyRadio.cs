@@ -9,10 +9,16 @@ namespace CommercialFreeRadio.Impl
 {
     public class StationSkyRadio : IRadioStation, ITuneinRadioStation
     {
+        private readonly Action<string, string> songChangeHandler;
         private readonly TimeSpanCache cache = new TimeSpanCache(new TimeSpan(0, 0, 5));
         private readonly SkyRadioPlaylistApi api = new SkyRadioPlaylistApi();
         private Track current = null;
         private DateTime sleepUntil = DateTime.Now;
+
+        public StationSkyRadio(Action<string, string> songChangeHandler)
+        {
+            this.songChangeHandler = songChangeHandler;
+        }
 
         public string Name { get { return "Sky Radio"; } }
         public string Uri {
@@ -33,6 +39,8 @@ namespace CommercialFreeRadio.Impl
             if (GetId(currentTrack) != GetId(current))
             {
                 Logger.Debug("Track: " + currentTrack);
+                if( currentTrack != null )
+                    songChangeHandler(currentTrack.Artist, currentTrack.Title);
                 if (currentTrack != null)
                     sleepUntil = currentTrack.End.AddSeconds(-10);
             }

@@ -14,12 +14,12 @@ namespace CommercialFreeRadio
             Logger.Init(args.UseVerbose);
             var stations = new IRadioStation[]
             {
-                new StationSublimeFm(),
+                new StationSublimeFm(LogTrack, false),
                 new Station3fm(),
                 new StationArrowCaz(),
                 new StationArrowClassicRock(),
                 new StationWildFm(),
-                new StationSkyRadio(),
+                new StationSkyRadio(LogTrack),
                 //new StationRadio538()
             };
             var nonstopstations = new IRadioStation[]
@@ -86,6 +86,16 @@ namespace CommercialFreeRadio
                     Thread.Sleep(10000);
                 }
             }
+        }
+
+        private static void LogTrack(string artist, string title)
+        {
+            if (string.IsNullOrEmpty(title))
+                Logger.Info(string.Format(@"""{0}""", artist));
+            else if (string.IsNullOrEmpty(artist) )
+                Logger.Info(string.Format(@"""{0}""", title));
+            else
+                Logger.Info(string.Format(@"""{0} - {1}""", artist, title));
         }
 
         private static IPlayer CreatePlayer(CommandLineArgument args, IEnumerable<IRadioStation> stations )

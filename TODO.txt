@@ -61,6 +61,12 @@ V nonstop=bluemarlin of deepfm
 V Tonen logo van de zender: Sonosplayer tunein stations (op basis van id) laten afspelen ipv url
 V TuneinNowPlayingFeed: constructor met id en guid genereren?
 - Console colors: http://www.dotnetperls.com/console-color
+- station: SonosDesktop:
+  - stream via "Stream What You Hear"
+  - reclame uitlezen via: spotilocal
+- windows taskbar programma
+- reklame Sublime?  Id=1001038197:7477407,Artist=,Title=ST Code stevie,Time=10:55:24-10:55:41,CategoryCode=317,CategoryName=SummerTime Actie,Type=Jingle
+- Recorder: Start jingle met album art?
 
 V TextToSpeech exe/app -> Sonos
 - https://github.com/Xeroday/Spotify-Ad-Blocker/ Hoe werkt dit? Stream url door te sturen naar Sonos?

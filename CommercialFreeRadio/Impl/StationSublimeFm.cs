@@ -13,11 +13,13 @@ namespace CommercialFreeRadio.Impl
     public class StationSublimeFm : IRadioStation, ITuneinRadioStation
     {
         private readonly PlaylistSublimeFmInterface playlist;
+        private readonly Action<string, string> songChangeHandler;
         private string currentTrackId;
 
-        public StationSublimeFm(IXmlInterfaceSublimeFm reader = null)
+        public StationSublimeFm(Action<string, string> songChangeHandler, bool playNieuwsVdVooruitgang, IXmlInterfaceSublimeFm reader = null)
         {
-            playlist = new PlaylistSublimeFmInterface(reader);
+            playlist = new PlaylistSublimeFmInterface(playNieuwsVdVooruitgang, reader);
+            this.songChangeHandler = songChangeHandler;
         }
 
         public string Name
@@ -41,12 +43,16 @@ namespace CommercialFreeRadio.Impl
                 track = playlist.ReadTracks().FirstOrDefault(t => t.StartTime < now && t.EndTime > now);
             }
             if (track != null && track.Id != currentTrackId)
+            {
                 Logger.Debug("Current track: " + track);
+                if (track != null)
+                    songChangeHandler(track.Artist, track.Title);
+            }
+
             currentTrackId = track != null ? track.Id : null;
             return track == null
-                ? (bool?)null
-                : track.Type == PlaylistSublimeFmInterface.TrackType.Commercial ||
-                    track.Type == PlaylistSublimeFmInterface.TrackType.News;
+                ? (bool?) null
+                : !track.PlayTrack();
         }
 
         public bool? IsMyStream(string uri)
@@ -85,10 +91,11 @@ namespace CommercialFreeRadio.Impl
             private readonly TimeSpanCache cache;
             private readonly IXmlInterfaceSublimeFm datareader;
             private readonly TimeSpan delay = new TimeSpan(0, 0, 7); //audiostream loop 7 seconden achter op interface
-
-            public PlaylistSublimeFmInterface(IXmlInterfaceSublimeFm datareader = null)
+            private readonly bool playNieuwsVdVooruitgang;
+            public PlaylistSublimeFmInterface(bool playNieuwsVdVooruitgang, IXmlInterfaceSublimeFm datareader = null)
             {
                 this.datareader = datareader??new HttpXmlInterfaceSublimeFm();
+                this.playNieuwsVdVooruitgang = playNieuwsVdVooruitgang;
                 cache = new TimeSpanCache(new TimeSpan(0, 5, 0));
             }
 
@@ -131,7 +138,7 @@ namespace CommercialFreeRadio.Impl
 
             private Track ParseTrack(XElement node)
             {
-                return new Track
+                return new Track(playNieuwsVdVooruitgang)
                 {
                     StartTime = DateTime.SpecifyKind(DateTime.Parse(node.XPathSelectElement("startTime.utc.iso").Value),DateTimeKind.Utc).ToLocalTime() + delay,
                     Id = node.XPathSelectElement("itemId").Value,
@@ -153,6 +160,12 @@ namespace CommercialFreeRadio.Impl
 
             public class Track
             {
+                private readonly bool playNieuwsVdVooruitgang;
+
+                public Track(bool playNieuwsVdVooruitgang)
+                {
+                    this.playNieuwsVdVooruitgang = playNieuwsVdVooruitgang;
+                }
                 public TrackType Type
                 {
                     get
@@ -194,6 +207,17 @@ namespace CommercialFreeRadio.Impl
                 public override string ToString()
                 {
                     return string.Format("Id={7},Artist={0},Title={1},Time={2:HH:mm:ss}-{6:HH:mm:ss},CategoryCode={4},CategoryName={5},Type={3}", Artist, Title, StartTime, Type, CategoryCode, CategoryName, EndTime, Id);
+                }
+
+                public bool PlayTrack()
+                {
+                    if (playNieuwsVdVooruitgang && Type == PlaylistSublimeFmInterface.TrackType.News && Title != null && Title.StartsWith("** nvdv"))
+                        return true;
+                    if (Type == PlaylistSublimeFmInterface.TrackType.Commercial)
+                        return false;
+                    if (Type == PlaylistSublimeFmInterface.TrackType.News)
+                        return false;
+                    return true;
                 }
             }
         }

@@ -13,7 +13,7 @@ namespace CommercialFreeRadio.Test.Impl
         [Test]
         public void ParseXml()
         {
-            var sut = new StationSublimeFm.PlaylistSublimeFmInterface(CreateReader("sublimenowonair.xml"));
+            var sut = new StationSublimeFm.PlaylistSublimeFmInterface(false, CreateReader("sublimenowonair.xml"));
 
             var tracks = sut.ReadTracks();
 
