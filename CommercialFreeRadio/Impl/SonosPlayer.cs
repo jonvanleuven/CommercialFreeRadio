@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace CommercialFreeRadio.Impl
 {
@@ -10,11 +9,13 @@ namespace CommercialFreeRadio.Impl
         private readonly TimeSpanCache isPlayingCache = new TimeSpanCache(new TimeSpan(0, 0, 5));
         private readonly TimeSpanCache tuneinTitleCache = new TimeSpanCache(new TimeSpan(1, 0, 0, 0));
         private DateTime? stoppedPlayingAt = DateTime.MinValue;
+        private readonly VolumeNormalizer normalizer;
 
         public SonosPlayer(UpnpInterface player, string name)
         {
             this.player = player;
             Name = name;
+            normalizer = new VolumeNormalizer( player.SetVolume, player.GetVolume );
         }
 
         public string Name { get; private set; }
@@ -27,10 +28,14 @@ namespace CommercialFreeRadio.Impl
                 SetTuninStream(tuneinStream.TuneinId);
             else
                 player.SetAVTransportURI(station.Uri);
+
             player.Play();
             stoppedPlayingAt = null;
             getUriCache.Clear();
             isPlayingCache.Clear();
+            normalizer.Normalize( (station is INormalizeVolumeStation)? ((INormalizeVolumeStation)station).NormalizeLevel : 0);
+
+
         }
 
         public bool? IsPlaying(IRadioStation station)

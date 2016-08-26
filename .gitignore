@@ -7,3 +7,6 @@ CommercialFreeRadio/bin/Debug/CommercialFreeRadio.vshost.exe.config
 CommercialFreeRadio/bin/Debug/CommercialFreeRadio.vshost.exe.manifest
 CommercialFreeRadio/bin/Debug/CommercialFreeRadio.log.1
 CommercialFreeRadio/bin/Debug
+CommercialFreeRadio.TrayApp/bin/*
+CommercialFreeRadio.TrayApp/obj/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
+CommercialFreeRadio.TrayApp/obj/*

@@ -73,6 +73,8 @@
     <Compile Include="Impl\UpnpInterface.cs" />
     <Compile Include="IDeviceScanner.cs" />
     <Compile Include="Impl\VlcPlayer.cs" />
+    <Compile Include="Impl\VolumeNormalizer.cs" />
+    <Compile Include="INormalizeVolumeStation.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="ITuneinRadioStation.cs" />
     <Compile Include="IRadioStation.cs" />

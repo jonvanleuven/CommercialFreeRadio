@@ -8,7 +8,7 @@ namespace CommercialFreeRadio
 {
     public class Program
     {
-        static void Main(string[] argString)
+        public static void Main(string[] argString)
         {
             var args = new CommandLineArgument(argString);
             Logger.Init(args.UseVerbose);

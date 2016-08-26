@@ -1,6 +1,6 @@
 namespace CommercialFreeRadio.Impl
 {
-    public class StationBlueMarlin : IRadioStation, ITuneinRadioStation
+    public class StationBlueMarlin : IRadioStation, ITuneinRadioStation, INormalizeVolumeStation
     {
         public string Name
         {
@@ -23,5 +23,7 @@ namespace CommercialFreeRadio.Impl
                 return true;
             return uri == Uri;
         }
+
+        public int NormalizeLevel { get { return 3; } }
     }
 }
