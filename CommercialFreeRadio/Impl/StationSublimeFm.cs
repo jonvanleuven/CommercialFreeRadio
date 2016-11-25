@@ -45,7 +45,7 @@ namespace CommercialFreeRadio.Impl
             if (track != null && track.Id != currentTrackId)
             {
                 Logger.Debug("Current track: " + track);
-                if (track != null)
+                if (track != null && track.PlayTrack())
                     songChangeHandler(track.Artist, track.Title);
             }
 

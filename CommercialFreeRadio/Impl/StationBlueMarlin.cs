@@ -24,6 +24,6 @@ namespace CommercialFreeRadio.Impl
             return uri == Uri;
         }
 
-        public int NormalizeLevel { get { return 3; } }
+        public int NormalizeLevel { get { return 2; } }
     }
 }

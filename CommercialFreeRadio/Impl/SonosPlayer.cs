@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace CommercialFreeRadio.Impl
 {
@@ -9,16 +10,16 @@ namespace CommercialFreeRadio.Impl
         private readonly TimeSpanCache isPlayingCache = new TimeSpanCache(new TimeSpan(0, 0, 5));
         private readonly TimeSpanCache tuneinTitleCache = new TimeSpanCache(new TimeSpan(1, 0, 0, 0));
         private DateTime? stoppedPlayingAt = DateTime.MinValue;
-        private readonly VolumeNormalizer normalizer;
 
         public SonosPlayer(UpnpInterface player, string name)
         {
             this.player = player;
             Name = name;
-            normalizer = new VolumeNormalizer( player.SetVolume, player.GetVolume );
         }
 
         public string Name { get; private set; }
+        public string Ip { get { return player.Ip; } }
+
         public void Play(IRadioStation station)
         {
             if (!station.Uri.StartsWith("x-rincon-mp3radio://") && !station.Uri.StartsWith("mms://") && !station.Uri.StartsWith("x-sonosapi-stream:"))
@@ -33,9 +34,22 @@ namespace CommercialFreeRadio.Impl
             stoppedPlayingAt = null;
             getUriCache.Clear();
             isPlayingCache.Clear();
-            normalizer.Normalize( (station is INormalizeVolumeStation)? ((INormalizeVolumeStation)station).NormalizeLevel : 0);
+            var normalizeLevel = (station is INormalizeVolumeStation) ? ((INormalizeVolumeStation) station).NormalizeLevel : 0;
+            new VolumeNormalizer(player.SetVolume, player.GetVolume).Normalize( normalizeLevel );
 
+            var all = new UpnpInterface(player.Ip).GetZoneGroupState().ZoneGroups.SelectMany(zg => zg.ZoneGroupMembers)
+                                .Distinct()
+                                .Select(p => new { IsMaster = p.Ip == player.Ip, Player = new UpnpInterface(p.Ip), GroupMember = p });
+            var master = all.Single(p => p.IsMaster);
+            foreach (var slave in all.Where(x => !x.IsMaster).Where(s => s.Player.GetMediaInfo().CurrentURI == "x-rincon:" + master.GroupMember.Id))
+            {
+                new VolumeNormalizer(slave.Player.SetVolume, slave.Player.GetVolume).Normalize(normalizeLevel);
+            }
+        }
 
+        public void SetVolume(int level)
+        {
+            player.SetVolume(level);
         }
 
         public bool? IsPlaying(IRadioStation station)

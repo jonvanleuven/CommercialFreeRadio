@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,13 +12,23 @@ namespace CommercialFreeRadio.Impl
 {
     public class UpnpInterface
     {
-        private readonly string ip;
-
         public UpnpInterface(string ip)
         {
-            if( string.IsNullOrEmpty(ip) )
+            if (string.IsNullOrEmpty(ip))
                 throw new NullReferenceException("Ip address is mandatory");
-            this.ip = ip;
+            Ip = ip;
+        }
+
+        public string Ip { get; private set; }
+
+        public GetZoneGroupStateStateResponse GetZoneGroupState()
+        {
+            var response = SoapCall(
+                "ZoneGroupTopology/Control",
+                "urn:upnp-org:serviceId:ZoneGroupTopology#GetZoneGroupState",
+                @"<ns0:GetZoneGroupState xmlns:ns0=""urn:schemas-upnp-org:service:ZoneGroupTopology:1""><ZoneGroupState></ZoneGroupState></ns0:GetZoneGroupState>");
+            var xml = (XElement) XDocument.Parse(GetElementValue(response, "ZoneGroupState")).FirstNode;
+            return new GetZoneGroupStateStateResponse(xml);
         }
 
         public void SetVolume(int volume)
@@ -42,7 +53,8 @@ namespace CommercialFreeRadio.Impl
             SoapCall(
                 "MediaRenderer/AVTransport/Control",
                 "urn:schemas-upnp-org:service:AVTransport:1#SetAVTransportURI",
-                @"<u:SetAVTransportURI xmlns:u=""urn:schemas-upnp-org:service:AVTransport:1""><InstanceID>0</InstanceID><CurrentURI>" + XmlEscape(uri) + "</CurrentURI><CurrentURIMetaData>" + XmlEscape(uriMetadata ?? string.Empty) + "</CurrentURIMetaData></u:SetAVTransportURI>");
+                @"<u:SetAVTransportURI xmlns:u=""urn:schemas-upnp-org:service:AVTransport:1""><InstanceID>0</InstanceID><CurrentURI>" + XmlEscape(uri) + "</CurrentURI><CurrentURIMetaData>" + XmlEscape(uriMetadata ?? string.Empty) +
+                "</CurrentURIMetaData></u:SetAVTransportURI>");
         }
 
         public void Play()
@@ -97,7 +109,7 @@ namespace CommercialFreeRadio.Impl
         private XElement SoapCall(string path, string soapAction, string bodyXml)
         {
             Logger.Debug("SoapCall calling action: {0}", soapAction);
-            var wr = WebRequest.Create("http://" + ip + ":1400/" + path);
+            var wr = WebRequest.Create("http://" + Ip + ":1400/" + path);
             var xml = @"<?xml version=""1.0"" encoding=""utf-8""?><s:Envelope s:encodingStyle=""http://schemas.xmlsoap.org/soap/encoding/"" xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/""><s:Body>" + bodyXml + "</s:Body></s:Envelope>";
             wr.ContentType = "text/xml;charset=utf-8";
             wr.ContentLength = xml.Length;
@@ -123,7 +135,7 @@ namespace CommercialFreeRadio.Impl
             {
                 CurrentTransportState = GetElementValue(xml, "CurrentTransportState");
                 CurrentTransportStatus = GetElementValue(xml, "CurrentTransportStatus");
-                CurrentSpeed = ParseInt(GetElementValue(xml, "CurrentSpeed") );
+                CurrentSpeed = ParseInt(GetElementValue(xml, "CurrentSpeed"));
             }
 
             public int? CurrentSpeed { get; private set; }
@@ -131,6 +143,47 @@ namespace CommercialFreeRadio.Impl
             public string CurrentTransportStatus { get; private set; }
         }
 
+        public class GetZoneGroupStateStateResponse
+        {
+            internal GetZoneGroupStateStateResponse(XElement xml)
+            {
+                ZoneGroups = xml.Elements().Select(g => new ZoneGroup
+                {
+                    Coordinator = g.Attribute("Coordinator").Value,
+                    Id = g.Attribute("ID").Value,
+                    ZoneGroupMembers = ((XElement) g).Elements().Select(gm => new ZoneGroupMember
+                    {
+                        Id = gm.Attribute("UUID").Value,
+                        Location = gm.Attribute("Location").Value,
+                        Name = gm.Attribute("ZoneName").Value,
+                    }).ToList()
+                }).ToList();
+            }
+
+            private GetZoneGroupStateStateResponse()
+            {
+            }
+
+            public IList<ZoneGroup> ZoneGroups { get; private set; }
+        }
+
+        public class ZoneGroup
+        {
+            public string Coordinator { get; internal set; }
+            public string Id { get; internal set; }
+
+            public IList<ZoneGroupMember> ZoneGroupMembers { get; internal set; }
+
+        }
+
+        public class ZoneGroupMember
+        {
+            public string Id { get; internal set; }
+            public string Location { get; internal set; }
+            public string Name { get; internal set; }
+            public string Ip { get { return Location.Substring("http://".Length, Location.IndexOf(":1400/") - 1 - ":1400/".Length); } }
+        }
+    
         public class GetMediaInfoResponse
         {
             internal GetMediaInfoResponse(XElement xml)

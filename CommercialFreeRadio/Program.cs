@@ -8,11 +8,22 @@ namespace CommercialFreeRadio
 {
     public class Program
     {
+        private readonly CommandLineArgument args;
+        private bool cancel;
+        private readonly IRadioStation[] stations;
+        private readonly  IRadioStation[] nonstopstations;
+        public IPlayer Player { get; private set; }
+        private readonly IRadioStation nonstop;
+
         public static void Main(string[] argString)
         {
-            var args = new CommandLineArgument(argString);
-            Logger.Init(args.UseVerbose);
-            var stations = new IRadioStation[]
+            new Program(argString).Run();
+        }
+
+        public Program(string[] argString)
+        {
+            this.args = new CommandLineArgument(argString);
+            this.stations = new IRadioStation[]
             {
                 new StationSublimeFm(LogTrack, false),
                 new Station3fm(),
@@ -20,42 +31,55 @@ namespace CommercialFreeRadio
                 new StationArrowClassicRock(),
                 new StationWildFm(),
                 new StationSkyRadio(LogTrack),
+                new StationStreamWhatYouHear("192.168.178.11", 23138) //TODO variabel maken
                 //new StationRadio538()
             };
-            var nonstopstations = new IRadioStation[]
+            this.nonstopstations = new IRadioStation[]
             {
                 new StationBlueMarlin(),
                 new StationDeepFm(),
                 new Station3fmAlternative()
             };
+            AllStations = stations.Union(nonstopstations);
+            this.nonstop = nonstopstations.SingleOrDefault(s => s.Name.Replace(" ", "").ToLower() == args.NonstopStationName.ToLower()) ?? nonstopstations.First();
+            Logger.Info("Nonstop station: '" + nonstop.Name + "'");
+            this.Player = CreatePlayer(args, stations);
+            if (args.UseRandom)
+                Player = new RandomPlayer(Player, stations, new TimeSpan(2, 0, 0));
+            Logger.Info("Using player: " + Player.Name);
+        }
+
+        public IEnumerable<IRadioStation> AllStations { get; private set; }
+
+        public void Run()
+        {
+            cancel = false;
+            Logger.Init(args.UseVerbose);
+            
             if (args.PrintUsage)
             {
+                Logger.Debug("print argument usage and do nothing");
                 args.ConsoleWriteUsage(stations, nonstopstations);
                 return;
             }
-
-            var nonstop = nonstopstations.SingleOrDefault(s => s.Name.Replace(" ", "").ToLower() == args.NonstopStationName.ToLower()) ?? nonstopstations.First();
-            Logger.Info("Nonstop station: '" + nonstop.Name + "'");
-            var player = CreatePlayer(args, stations);
-            if(args.UseRandom)
-                player = new RandomPlayer(player, stations, new TimeSpan(2, 0, 0));
-            Logger.Info("Using player: " + player.Name);
+            
             var poller = CreatePoller(new TimeSpan(0, 0, 1));
             var state = new State();
             state.ChangeHandler = (fromType, toType) =>
             {
-                Logger.Info("--- {0}", toType);
                 if (fromType == SoundType.CommercialBreak)
                 {
-                    if ((player.IsPlaying(nonstop) ?? true))
-                        player.Play(state.Current);
+                    Logger.Info("Commercial break ended!", toType);
+                    if ((Player.IsPlaying(nonstop) ?? true))
+                        Player.Play(state.Current);
                     else
                         Logger.Info("Not switching to '" + state.Current.Name + "', not playing '" + nonstop.Name + "'");
                 }
                 if (toType == SoundType.CommercialBreak)
                 {
-                    if ((player.IsPlaying(state.Current) ?? true))
-                        player.Play(nonstop);
+                    Logger.Info("Commercial break detected!", toType);
+                    if ((Player.IsPlaying(state.Current) ?? true))
+                        Player.Play(nonstop);
                     else
                         Logger.Info("Not switching to '" + nonstop.Name + "', not playing '" + state.Current.Name + "'");
                 }
@@ -64,8 +88,8 @@ namespace CommercialFreeRadio
             {
                 try
                 {
-                    var current = stations.SingleOrDefault(s => player.IsPlaying(s) ?? false);
-                    if(!(player.IsPlaying(nonstop) ?? false))
+                    var current = stations.SingleOrDefault(s => Player.IsPlaying(s) ?? false);
+                    if(!(Player.IsPlaying(nonstop) ?? false))
                         state.UpdateStation(current);
                     if (state.Current == null)
                         continue;
@@ -83,10 +107,20 @@ namespace CommercialFreeRadio
                 catch (Exception e)
                 {
                     Logger.Error(e);
+                    if (cancel)
+                        return;
                     Thread.Sleep(10000);
                 }
+                if (cancel)
+                    return;
             }
         }
+
+        public void Cancel()
+        {
+            Logger.Info("Cancelling CommercialFreeRadio.....");
+            cancel = true;
+        } 
 
         private static void LogTrack(string artist, string title)
         {

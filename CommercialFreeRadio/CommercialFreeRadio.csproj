@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Impl\AllSonosPlayers.cs" />
     <Compile Include="Impl\DeviceScanner.cs" />
     <Compile Include="Impl\EmptyPlayer.cs" />
     <Compile Include="Impl\Logger.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Impl\StationDeepFm.cs" />
     <Compile Include="Impl\StationNpo1.cs" />
     <Compile Include="Impl\StationSkyRadio.cs" />
+    <Compile Include="Impl\StationStreamWhatYouHear.cs" />
     <Compile Include="Impl\StationSublimeFm.cs" />
     <Compile Include="Impl\Station3fm.cs" />
     <Compile Include="Impl\StationBlueMarlin.cs" />
