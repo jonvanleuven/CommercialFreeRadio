@@ -10,7 +10,7 @@ using System.Xml.XPath;
 
 namespace CommercialFreeRadio.Impl
 {
-    public class StationSublimeFm : IRadioStation, ITuneinRadioStation
+    public class StationSublimeFm : IRadioStation, ITuneinRadioStation, INormalizeVolumeStation
     {
         private readonly PlaylistSublimeFmInterface playlist;
         private readonly Action<string, string> songChangeHandler;
@@ -63,6 +63,8 @@ namespace CommercialFreeRadio.Impl
                 return true;
             return false;
         }
+
+        public int NormalizeLevel { get { return -2; } }
 
         public interface IXmlInterfaceSublimeFm
         {

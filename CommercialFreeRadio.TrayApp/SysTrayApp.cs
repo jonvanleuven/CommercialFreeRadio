@@ -38,10 +38,10 @@ namespace CommercialFreeRadio.TrayApp
                     foreach (var slave in all.Where(x => !x.IsMaster))
                     {
                         slave.Player.SetAVTransportURI("x-rincon:" + master.GroupMember.Id);
-                        slave.Player.SetVolume(3);
+                        slave.Player.SetVolume(4);
                     }
                     sonosPlayer.Play(station);
-                    sonosPlayer.SetVolume(6);
+                    sonosPlayer.SetVolume(5);
                 }));
             }
             sonosMenuItem.Enabled = (sonosPlayer != null);

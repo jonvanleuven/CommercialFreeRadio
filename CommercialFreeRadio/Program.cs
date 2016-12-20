@@ -36,11 +36,14 @@ namespace CommercialFreeRadio
             };
             this.nonstopstations = new IRadioStation[]
             {
+                new StationSmoothJazzFloridaPlus(),
                 new StationBlueMarlin(),
                 new StationDeepFm(),
                 new Station3fmAlternative()
             };
             AllStations = stations.Union(nonstopstations);
+            if (args.PrintUsage)
+                return;
             this.nonstop = nonstopstations.SingleOrDefault(s => s.Name.Replace(" ", "").ToLower() == args.NonstopStationName.ToLower()) ?? nonstopstations.First();
             Logger.Info("Nonstop station: '" + nonstop.Name + "'");
             this.Player = CreatePlayer(args, stations);

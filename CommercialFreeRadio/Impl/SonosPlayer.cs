@@ -10,10 +10,11 @@ namespace CommercialFreeRadio.Impl
         private readonly TimeSpanCache isPlayingCache = new TimeSpanCache(new TimeSpan(0, 0, 5));
         private readonly TimeSpanCache tuneinTitleCache = new TimeSpanCache(new TimeSpan(1, 0, 0, 0));
         private DateTime? stoppedPlayingAt = DateTime.MinValue;
-
+        private readonly VolumeNormalizer normalizer;
         public SonosPlayer(UpnpInterface player, string name)
         {
             this.player = player;
+            this.normalizer = new VolumeNormalizer(player.SetVolume, player.GetVolume);
             Name = name;
         }
 
@@ -35,8 +36,8 @@ namespace CommercialFreeRadio.Impl
             getUriCache.Clear();
             isPlayingCache.Clear();
             var normalizeLevel = (station is INormalizeVolumeStation) ? ((INormalizeVolumeStation) station).NormalizeLevel : 0;
-            new VolumeNormalizer(player.SetVolume, player.GetVolume).Normalize( normalizeLevel );
-
+            normalizer.Normalize( normalizeLevel );
+            /* TODO normalize volume of slaves (let op normalizer is statefull)
             var all = new UpnpInterface(player.Ip).GetZoneGroupState().ZoneGroups.SelectMany(zg => zg.ZoneGroupMembers)
                                 .Distinct()
                                 .Select(p => new { IsMaster = p.Ip == player.Ip, Player = new UpnpInterface(p.Ip), GroupMember = p });
@@ -44,7 +45,7 @@ namespace CommercialFreeRadio.Impl
             foreach (var slave in all.Where(x => !x.IsMaster).Where(s => s.Player.GetMediaInfo().CurrentURI == "x-rincon:" + master.GroupMember.Id))
             {
                 new VolumeNormalizer(slave.Player.SetVolume, slave.Player.GetVolume).Normalize(normalizeLevel);
-            }
+            }*/
         }
 
         public void SetVolume(int level)

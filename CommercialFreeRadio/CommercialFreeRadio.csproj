@@ -66,6 +66,7 @@
     <Compile Include="Impl\StationDeepFm.cs" />
     <Compile Include="Impl\StationNpo1.cs" />
     <Compile Include="Impl\StationSkyRadio.cs" />
+    <Compile Include="Impl\StationSmoothJazzFloridaPlus.cs" />
     <Compile Include="Impl\StationStreamWhatYouHear.cs" />
     <Compile Include="Impl\StationSublimeFm.cs" />
     <Compile Include="Impl\Station3fm.cs" />
