@@ -12,9 +12,7 @@ namespace CommercialFreeRadio.Impl
         private readonly Action<string, string> songChangeHandler;
         private readonly TimeSpanCache cache = new TimeSpanCache(new TimeSpan(0, 0, 5));
         private readonly SkyRadioPlaylistApi api = new SkyRadioPlaylistApi();
-        private Track current = null;
-        private DateTime sleepUntil = DateTime.Now;
-
+        private string currentTrackId;
         public StationSkyRadio(Action<string, string> songChangeHandler)
         {
             this.songChangeHandler = songChangeHandler;
@@ -27,31 +25,18 @@ namespace CommercialFreeRadio.Impl
         public int TuneinId { get { return 9067; } }
         public bool? IsPlayingCommercialBreak()
         {
-            if (sleepUntil > DateTime.Now)
-                return current == null;
-
             var playlist = cache.ReadCached(() => api.ReadPlayList());
-
-            var currentTrack = playlist.FirstOrDefault(track => track.Start < DateTime.Now && track.End > DateTime.Now);
-            if( currentTrack == null )
-                currentTrack = playlist.FirstOrDefault(track => track.Start.AddSeconds(-10) < DateTime.Now && track.End.AddSeconds(10) > DateTime.Now);
-
-            if (GetId(currentTrack) != GetId(current))
+            var current = playlist.FirstOrDefault(t => t.PlayingNow());
+            if (current != null)
             {
-                Logger.Debug("Track: " + currentTrack);
-                if( currentTrack != null )
-                    songChangeHandler(currentTrack.Artist, currentTrack.Title);
-                if (currentTrack != null)
-                    sleepUntil = currentTrack.End.AddSeconds(-10);
+                if( currentTrackId != current.Id && current.Type == Track.EntryType.Track)
+                    songChangeHandler(current.Artist, current.Title);
+                currentTrackId = current.Id ?? currentTrackId;
+                return current.Type == Track.EntryType.CommercialBreak;
             }
-            current = currentTrack;
-            return current == null;
+            return null;
         }
-
-        private static string GetId(Track t)
-        {
-            return t != null ? t.Id : null;
-        }
+        
 
         public bool? IsMyStream(string uri)
         {
@@ -71,7 +56,24 @@ namespace CommercialFreeRadio.Impl
                 list.AddRange(root.previous);
                 list.Add(root.current);
                 //list.AddRange(root.next); //heeft geen geldige duration
-                return list.Where(t => t.type == "track").Select(t => Track.Parse(t, new TimeSpan(0, 1, 20))).OrderBy(t => t.Start).ToList();
+                var tracks = list.Where(t => t.type == "track").Select(t => Track.Parse(t, new TimeSpan(0, 1, 20))).OrderBy(t => t.Start).ToList();
+                //voeg (commercial)breaks toe:
+                var playlist = tracks.Aggregate(new List<Track>(), (current, next) =>
+                {
+                    var previous = current.LastOrDefault();
+                    if (previous != null && previous.End < next.Start)
+                    {
+                        current.Add(Track.CreateBreak(previous.End, next.Start));
+                    }
+                    current.Add(next);
+                    return current;
+                });
+                var lastEnd = playlist.LastOrDefault()?.End;
+                if (lastEnd?.Minute >= 25 && lastEnd?.Minute <= 30)
+                    playlist.Add(Track.CreateBreak(lastEnd.Value, lastEnd.Value.AddMinutes(10)));
+                if (lastEnd?.Minute >= 55 || lastEnd?.Minute <= 0)
+                    playlist.Add(Track.CreateBreak(lastEnd.Value, lastEnd.Value.AddMinutes(10)));
+                return playlist;
             }
 
             private byte[] ReadJsonData(string url)
@@ -129,13 +131,25 @@ namespace CommercialFreeRadio.Impl
         {
             public static Track Parse(JsonTrack t, TimeSpan delay)
             {
+                if (t.type != "track")
+                    throw new Exception("Unexpected track type '" + t.type + "'");
                 return new Track
                 {
                     Id = t.id,
                     Title = t.title,
                     Artist = t.artist,
                     Start = (DateTime.Parse(t.startTime) + delay),
-                    End = (DateTime.Parse(t.startTime).AddMilliseconds(t.duration) + delay)
+                    End = (DateTime.Parse(t.startTime).AddMilliseconds(t.duration) + delay),
+                    Type = EntryType.Track
+                };
+            }
+            public static Track CreateBreak(DateTime start, DateTime end)
+            {
+                return new Track
+                {
+                    Start = start,
+                    End = end,
+                    Type = (end - start > new TimeSpan(0, 2, 0)) ? EntryType.CommercialBreak : EntryType.Break
                 };
             }
             private Track() { }
@@ -144,10 +158,23 @@ namespace CommercialFreeRadio.Impl
             public string Artist { get; private set; }
             public DateTime Start { get; private set; }
             public DateTime End { get; private set; }
+            public EntryType Type { get; private set; }
+
+            public bool PlayingNow()
+            {
+                return Start < DateTime.Now && End > DateTime.Now;
+            }
 
             public override string ToString()
             {
-                return string.Format("Id={0}, Artist={1}, Title={2}, Time={3:HH:mm:ss}-{4:HH:mm:ss}", Id, Artist, Title, Start, End);
+                return string.Format("Id={0}, Artist={1}, Title={2}, Time={3:HH:mm:ss}-{4:HH:mm:ss}, Type={5}", Id, Artist, Title, Start, End, Type);
+            }
+
+            public enum EntryType
+            {
+                Track,
+                Break,
+                CommercialBreak
             }
         }
     }
