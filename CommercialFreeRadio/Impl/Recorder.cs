@@ -61,11 +61,12 @@ namespace CommercialFreeRadio.Impl
                 Logger.Info("Start recording '" + url + "' to '" + filename + "'");
                 var req = WebRequest.Create(url);
                 var response = req.GetResponse();
-                var Length = 256;
+                var Length = 256 * 256 * 256;
                 var buffer = new Byte[Length];
                 readStream = response.GetResponseStream();
                 var bytesRead = readStream.Read(buffer, 0, Length);
-                while (bytesRead > 0 && !stopRecording)
+                while (//bytesRead > 0 && 
+                    !stopRecording)
                 {
                     var fileStream = new FileStream(filename, FileMode.Append);
                     fileStream.Write(buffer, 0, bytesRead);

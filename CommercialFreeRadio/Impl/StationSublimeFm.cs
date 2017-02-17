@@ -190,6 +190,7 @@ namespace CommercialFreeRadio.Impl
                             case "410":
                             case "225":
                             case "389":
+                            case "266":
                                 return TrackType.Commercial;
                         }
                         if (!string.IsNullOrEmpty(Artist) && !string.IsNullOrEmpty(Title))

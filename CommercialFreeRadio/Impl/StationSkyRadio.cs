@@ -27,14 +27,15 @@ namespace CommercialFreeRadio.Impl
         {
             var playlist = cache.ReadCached(() => api.ReadPlayList());
             var current = playlist.FirstOrDefault(t => t.PlayingNow());
-            if (current != null)
+            if (current == null)
+                return null;
+            if (currentTrackId != current.Id && current.Type == Track.EntryType.Track)
             {
-                if( currentTrackId != current.Id && current.Type == Track.EntryType.Track)
-                    songChangeHandler(current.Artist, current.Title);
-                currentTrackId = current.Id ?? currentTrackId;
-                return current.Type == Track.EntryType.CommercialBreak;
-            }
-            return null;
+                songChangeHandler(current.Artist, current.Title);
+                cache.SetExpireTime(current.End.AddSeconds(-10));
+            }   
+            currentTrackId = current.Id ?? currentTrackId;
+            return current.Type == Track.EntryType.CommercialBreak;
         }
         
 
@@ -56,7 +57,7 @@ namespace CommercialFreeRadio.Impl
                 list.AddRange(root.previous);
                 list.Add(root.current);
                 //list.AddRange(root.next); //heeft geen geldige duration
-                var tracks = list.Where(t => t.type == "track").Select(t => Track.Parse(t, new TimeSpan(0, 1, 20))).OrderBy(t => t.Start).ToList();
+                var tracks = list.Where(t => t.type == "track").Select(t => Track.Parse(t, new TimeSpan(0, 1, 12))).OrderBy(t => t.Start).ToList();
                 //voeg (commercial)breaks toe:
                 var playlist = tracks.Aggregate(new List<Track>(), (current, next) =>
                 {
@@ -69,9 +70,9 @@ namespace CommercialFreeRadio.Impl
                     return current;
                 });
                 var lastEnd = playlist.LastOrDefault()?.End;
-                if (lastEnd?.Minute >= 25 && lastEnd?.Minute <= 30)
+                if (lastEnd?.Minute >= 24 && lastEnd?.Minute <= 30)
                     playlist.Add(Track.CreateBreak(lastEnd.Value, lastEnd.Value.AddMinutes(10)));
-                if (lastEnd?.Minute >= 55 || lastEnd?.Minute <= 0)
+                if (lastEnd?.Minute >= 54 || lastEnd?.Minute <= 0)
                     playlist.Add(Track.CreateBreak(lastEnd.Value, lastEnd.Value.AddMinutes(10)));
                 return playlist;
             }

@@ -71,3 +71,9 @@ V ISonosNormalize o.i.d: volume normalize per zender inregelbaar
 
 V TextToSpeech exe/app -> Sonos
 - https://github.com/Xeroday/Spotify-Ad-Blocker/ Hoe werkt dit? Stream url door te sturen naar Sonos?
+V support meerdere sonos players
+- open url (Stream What You Hear) via Icon app
+- playlist funx http://www.funx.nl/dalet_data/6/internet.xml
+- andere zenders van skyradio: http://www.skyradio.nl/
+- radio 2: http://radioplayer.npo.nl/data/radiobox2/nowonair/2.json
+- hoe werkt icecast?

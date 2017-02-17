@@ -60,6 +60,14 @@ namespace CommercialFreeRadio.Impl
             data.Clear();
         }
 
+        public void SetExpireTime(DateTime time)
+        {
+            foreach (var entry in data)
+            {
+                entry.Value.ExpireTimeTicks = time.Ticks;
+            }
+        }
+
         private T ReadCachedInternal<T>(object key, Func<T> readCallback)
         {
             var result = GetAddOrUpdate<T>(key, readCallback);
@@ -85,7 +93,7 @@ namespace CommercialFreeRadio.Impl
             return DateTime.Now.Ticks >= entry.ExpireTimeTicks;
         }
 
-        private struct CachedData
+        private class CachedData
         {
             public long ExpireTimeTicks { get; set; }
             public object Value { get; set; }

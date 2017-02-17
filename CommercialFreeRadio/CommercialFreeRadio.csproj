@@ -51,7 +51,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Impl\AllSonosPlayers.cs" />
     <Compile Include="Impl\DeviceScanner.cs" />
     <Compile Include="Impl\EmptyPlayer.cs" />
     <Compile Include="Impl\Logger.cs" />
