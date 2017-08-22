@@ -39,7 +39,8 @@ namespace CommercialFreeRadio
                 new StationSmoothJazzFloridaPlus(),
                 new StationBlueMarlin(),
                 new StationDeepFm(),
-                new Station3fmAlternative()
+                new Station3fmAlternative(),
+                new StationSkyRadioLounge()
             };
             AllStations = stations.Union(nonstopstations);
             if (args.PrintUsage)

@@ -60,6 +60,7 @@
     <Compile Include="Impl\SonosPlayer.cs" />
     <Compile Include="Impl\StationArrowCaz.cs" />
     <Compile Include="Impl\Station3fmAlternative.cs" />
+    <Compile Include="Impl\StationSkyRadioLounge.cs" />
     <Compile Include="Impl\StationRadio538.cs" />
     <Compile Include="Impl\StationArrowClassicRock.cs" />
     <Compile Include="Impl\StationDeepFm.cs" />

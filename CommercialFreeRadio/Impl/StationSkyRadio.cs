@@ -20,7 +20,7 @@ namespace CommercialFreeRadio.Impl
 
         public string Name { get { return "Sky Radio"; } }
         public string Uri {
-            get { return "x-rincon-mp3radio://8603.live.streamtheworld.com/SKYRADIO.mp3"; }
+            get { return "x-rincon-mp3radio://20103.live.streamtheworld.com/SKYRADIO.mp3"; }
         }
         public int TuneinId { get { return 9067; } }
         public bool? IsPlayingCommercialBreak()

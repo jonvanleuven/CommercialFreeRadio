@@ -19,6 +19,7 @@ namespace CommercialFreeRadio.Impl
 
         public bool? IsPlayingCommercialBreak()
         {
+            //TODO: http://www.arrow.nl/nowplaying/nowplaying.php
             var result = cache.ReadCached(() => feed.Read(TuneinId).Secondary.Title) ?? string.Empty;
             if (nowPlaying == null || nowPlaying.Title != result)
             {
