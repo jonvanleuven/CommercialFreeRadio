@@ -126,6 +126,7 @@ namespace CommercialFreeRadio
             cancel = true;
         } 
 
+        [Obsolete("Gebruik LogWhenChanged")]
         private static void LogTrack(string artist, string title)
         {
             if (string.IsNullOrEmpty(title))

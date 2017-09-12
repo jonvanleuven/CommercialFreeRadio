@@ -36,6 +36,9 @@
     <ApplicationIcon>CommercialFreeRadio.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Orthogonal.NTagLite, Version=2.0.9.0, Culture=neutral, PublicKeyToken=6811f57591873a69, processorArchitecture=MSIL">
+      <HintPath>..\packages\Orthogonal.NTagLite.2.0.9.0\lib\net40-Client\Orthogonal.NTagLite.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -54,6 +57,7 @@
     <Compile Include="Impl\DeviceScanner.cs" />
     <Compile Include="Impl\EmptyPlayer.cs" />
     <Compile Include="Impl\Logger.cs" />
+    <Compile Include="Impl\LogWhenChanged.cs" />
     <Compile Include="Impl\Poller.cs" />
     <Compile Include="Impl\RandomPlayer.cs" />
     <Compile Include="Impl\Recorder.cs" />
@@ -87,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="CommercialFreeRadio.ico" />

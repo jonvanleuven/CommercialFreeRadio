@@ -9,9 +9,11 @@ namespace CommercialFreeRadio.Impl
     public class StationArrowCaz : IRadioStation, ITuneinRadioStation
     {
         private readonly PlaylistArrowCazInterface playlist;
+        private readonly LogWhenChanged songlogger;
 
         public StationArrowCaz()
         {
+            this.songlogger = new LogWhenChanged();
             this.playlist = new PlaylistArrowCazInterface();
         }
 
@@ -28,6 +30,7 @@ namespace CommercialFreeRadio.Impl
             var current = playlist.ReadCurrentTrack();
             if (current == null)
                 return null;
+            songlogger.Info( $@"""{current.Artist} - {current.Title}""" );
             return current.Title != null && current.Title.ToUpper().StartsWith("TME COMMERCIAL");
         }
 
